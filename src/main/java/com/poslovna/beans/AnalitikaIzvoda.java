@@ -28,5 +28,8 @@ public class AnalitikaIzvoda {
 	private RacunPravnogLica duznik;
 	@ManyToOne(optional=false)
 	private RacunPravnogLica poverilac;
-	
+	@ManyToOne
+	private NaseljenoMesto naseljenoMesto;
+	@ManyToOne
+	private VrstaPlacanja vrstaPlacanja;
 }
