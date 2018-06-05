@@ -36,6 +36,8 @@ public class QAnalitikaIzvoda extends EntityPathBase<AnalitikaIzvoda> {
 
     public final NumberPath<Integer> modelZaduzenja = createNumber("modelZaduzenja", Integer.class);
 
+    public final QNaseljenoMesto naseljenoMesto;
+
     public final QRacunPravnogLica poverilac;
 
     public final StringPath pozivNaBroj = createString("pozivNaBroj");
@@ -49,6 +51,8 @@ public class QAnalitikaIzvoda extends EntityPathBase<AnalitikaIzvoda> {
     public final StringPath svrhaPlacanja = createString("svrhaPlacanja");
 
     public final NumberPath<Integer> tipGreske = createNumber("tipGreske", Integer.class);
+
+    public final QVrstaPlacanja vrstaPlacanja;
 
     public QAnalitikaIzvoda(String variable) {
         this(AnalitikaIzvoda.class, forVariable(variable), INITS);
@@ -69,7 +73,9 @@ public class QAnalitikaIzvoda extends EntityPathBase<AnalitikaIzvoda> {
     public QAnalitikaIzvoda(Class<? extends AnalitikaIzvoda> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.duznik = inits.isInitialized("duznik") ? new QRacunPravnogLica(forProperty("duznik"), inits.get("duznik")) : null;
+        this.naseljenoMesto = inits.isInitialized("naseljenoMesto") ? new QNaseljenoMesto(forProperty("naseljenoMesto"), inits.get("naseljenoMesto")) : null;
         this.poverilac = inits.isInitialized("poverilac") ? new QRacunPravnogLica(forProperty("poverilac"), inits.get("poverilac")) : null;
+        this.vrstaPlacanja = inits.isInitialized("vrstaPlacanja") ? new QVrstaPlacanja(forProperty("vrstaPlacanja")) : null;
     }
 
 }
