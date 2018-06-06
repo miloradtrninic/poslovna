@@ -18,6 +18,6 @@ public class Drzava {
 	@OneToMany(mappedBy="drzava")
 	private Set<NaseljenoMesto> naseljenaMesta;
 	
-	@OneToMany
+	@OneToMany(orphanRemoval=true)
 	private Set<Valuta> valute;
 }

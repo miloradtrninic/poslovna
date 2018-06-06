@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -16,6 +17,8 @@ import com.querydsl.core.types.Path;
 public class QPoruka extends EntityPathBase<Poruka> {
 
     private static final long serialVersionUID = 423598162L;
+
+    private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QPoruka poruka = new QPoruka("poruka");
 
@@ -27,18 +30,27 @@ public class QPoruka extends EntityPathBase<Poruka> {
 
     public final StringPath porukaNalogaId = createString("porukaNalogaId");
 
-    public final SimplePath<Valuta> valuta = createSimple("valuta", Valuta.class);
+    public final QValuta valuta;
 
     public QPoruka(String variable) {
-        super(Poruka.class, forVariable(variable));
+        this(Poruka.class, forVariable(variable), INITS);
     }
 
     public QPoruka(Path<? extends Poruka> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QPoruka(PathMetadata metadata) {
-        super(Poruka.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QPoruka(PathMetadata metadata, PathInits inits) {
+        this(Poruka.class, metadata, inits);
+    }
+
+    public QPoruka(Class<? extends Poruka> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.valuta = inits.isInitialized("valuta") ? new QValuta(forProperty("valuta")) : null;
     }
 
 }

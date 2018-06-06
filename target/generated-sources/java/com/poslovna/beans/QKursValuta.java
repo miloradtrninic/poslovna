@@ -28,9 +28,9 @@ public class QKursValuta extends EntityPathBase<KursValuta> {
 
     public final QKursnaLista kursnaLista;
 
-    public final SimplePath<Valuta> osnovnaValuta = createSimple("osnovnaValuta", Valuta.class);
+    public final QValuta osnovnaValuta;
 
-    public final SimplePath<Valuta> premaValuti = createSimple("premaValuti", Valuta.class);
+    public final QValuta premaValuti;
 
     public final NumberPath<Double> prodajni = createNumber("prodajni", Double.class);
 
@@ -55,6 +55,8 @@ public class QKursValuta extends EntityPathBase<KursValuta> {
     public QKursValuta(Class<? extends KursValuta> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.kursnaLista = inits.isInitialized("kursnaLista") ? new QKursnaLista(forProperty("kursnaLista")) : null;
+        this.osnovnaValuta = inits.isInitialized("osnovnaValuta") ? new QValuta(forProperty("osnovnaValuta")) : null;
+        this.premaValuti = inits.isInitialized("premaValuti") ? new QValuta(forProperty("premaValuti")) : null;
     }
 
 }

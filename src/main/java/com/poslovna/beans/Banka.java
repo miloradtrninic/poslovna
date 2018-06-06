@@ -19,5 +19,6 @@ public class Banka extends PravnaLica {
 	private String swift;
 	@OneToMany(orphanRemoval=true, fetch=FetchType.LAZY)
 	private Set<RacunPravnogLica> racuni;
+	@OneToMany(orphanRemoval=true, fetch=FetchType.LAZY)
 	private Set<KursnaLista> kursneListe;
 }

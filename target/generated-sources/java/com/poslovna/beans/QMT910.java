@@ -22,24 +22,24 @@ public class QMT910 extends EntityPathBase<MT910> {
 
     public static final QMT910 mT910 = new QMT910("mT910");
 
-    public final QPoruka _super = new QPoruka(this);
+    public final QPoruka _super;
 
     public final QBanka bankaPoverioca;
 
     //inherited
-    public final DateTimePath<java.util.Date> datumValute = _super.datumValute;
+    public final DateTimePath<java.util.Date> datumValute;
 
     //inherited
-    public final NumberPath<Long> Id = _super.Id;
+    public final NumberPath<Long> Id;
 
     //inherited
-    public final NumberPath<Double> iznos = _super.iznos;
+    public final NumberPath<Double> iznos;
 
     //inherited
-    public final StringPath porukaNalogaId = _super.porukaNalogaId;
+    public final StringPath porukaNalogaId;
 
-    //inherited
-    public final SimplePath<Valuta> valuta = _super.valuta;
+    // inherited
+    public final QValuta valuta;
 
     public QMT910(String variable) {
         this(MT910.class, forVariable(variable), INITS);
@@ -59,7 +59,13 @@ public class QMT910 extends EntityPathBase<MT910> {
 
     public QMT910(Class<? extends MT910> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this._super = new QPoruka(type, metadata, inits);
         this.bankaPoverioca = inits.isInitialized("bankaPoverioca") ? new QBanka(forProperty("bankaPoverioca")) : null;
+        this.datumValute = _super.datumValute;
+        this.Id = _super.Id;
+        this.iznos = _super.iznos;
+        this.porukaNalogaId = _super.porukaNalogaId;
+        this.valuta = _super.valuta;
     }
 
 }

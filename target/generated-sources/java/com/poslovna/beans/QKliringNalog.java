@@ -36,7 +36,7 @@ public class QKliringNalog extends EntityPathBase<KliringNalog> {
 
     public final NumberPath<Double> ukupanIznos = createNumber("ukupanIznos", Double.class);
 
-    public final SimplePath<Valuta> valuta = createSimple("valuta", Valuta.class);
+    public final QValuta valuta;
 
     public QKliringNalog(String variable) {
         this(KliringNalog.class, forVariable(variable), INITS);
@@ -58,6 +58,7 @@ public class QKliringNalog extends EntityPathBase<KliringNalog> {
         super(type, metadata, inits);
         this.duznik = inits.isInitialized("duznik") ? new QBanka(forProperty("duznik")) : null;
         this.poverilac = inits.isInitialized("poverilac") ? new QBanka(forProperty("poverilac")) : null;
+        this.valuta = inits.isInitialized("valuta") ? new QValuta(forProperty("valuta")) : null;
     }
 
 }

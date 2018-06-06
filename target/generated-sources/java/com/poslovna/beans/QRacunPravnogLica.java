@@ -28,7 +28,7 @@ public class QRacunPravnogLica extends EntityPathBase<RacunPravnogLica> {
 
     public final DateTimePath<java.util.Date> datumOtvaranja = createDateTime("datumOtvaranja", java.util.Date.class);
 
-    public final SimplePath<Valuta> valuta = createSimple("valuta", Valuta.class);
+    public final QValuta valuta;
 
     public final BooleanPath vazeci = createBoolean("vazeci");
 
@@ -53,6 +53,7 @@ public class QRacunPravnogLica extends EntityPathBase<RacunPravnogLica> {
     public QRacunPravnogLica(Class<? extends RacunPravnogLica> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.banka = inits.isInitialized("banka") ? new QBanka(forProperty("banka")) : null;
+        this.valuta = inits.isInitialized("valuta") ? new QValuta(forProperty("valuta")) : null;
         this.vlasnik = inits.isInitialized("vlasnik") ? new QPravnaLica(forProperty("vlasnik")) : null;
     }
 

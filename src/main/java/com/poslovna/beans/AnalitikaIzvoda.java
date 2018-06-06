@@ -3,6 +3,9 @@ package com.poslovna.beans;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import lombok.Getter;
@@ -11,6 +14,7 @@ import lombok.Setter;
 
 @Entity @Getter @Setter @NoArgsConstructor
 public class AnalitikaIzvoda {
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String svrhaPlacanja;
 	private Date primljen;
@@ -28,8 +32,8 @@ public class AnalitikaIzvoda {
 	private RacunPravnogLica duznik;
 	@ManyToOne(optional=false)
 	private RacunPravnogLica poverilac;
-	@ManyToOne
+	@ManyToOne(optional=false)
 	private NaseljenoMesto naseljenoMesto;
-	@ManyToOne
+	@ManyToOne(optional=false)
 	private VrstaPlacanja vrstaPlacanja;
 }
