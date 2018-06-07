@@ -14,16 +14,18 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileUploadController {
 
 	@PostMapping(value = "/rtgs")
-	public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) {
 		String message = "";
 		try {
 			System.out.println("Uploaded file name: " + file.getOriginalFilename());
  
 			message = "You successfully uploaded " + file.getOriginalFilename() + "!";
-			return ResponseEntity.status(HttpStatus.OK).body(message);
+			//return ResponseEntity.status(HttpStatus.OK).body(message);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			message = "FAIL to upload " + file.getOriginalFilename() + "!";
-			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
+			//return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 	}
 }
