@@ -3,6 +3,7 @@ package com.poslovna.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,5 +28,10 @@ public class FileUploadController {
 			//return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
+	}
+	
+	@GetMapping(value="/get")
+	public ResponseEntity<String> getString() {
+		return new ResponseEntity<String>( "mrs",HttpStatus.OK);
 	}
 }
