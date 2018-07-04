@@ -15,7 +15,7 @@ public class DnevnoStanjeServiceImpl implements DnevnoStanjeService{
 	private DnevnoStanjeRepo dnevnoStanjeRepo;
 
 	@Override
-	public boolean changeDnevnoStanje(RtgsCreation rtgsNalog, RacunPravnogLica racun, boolean uKorist) {
+	public DnevnoStanje changeDnevnoStanje(RtgsCreation rtgsNalog, RacunPravnogLica racun, boolean uKorist) {
 
 		DnevnoStanje dnevnoStanje = new DnevnoStanje();
 		Optional<DnevnoStanje> dnevnoStanjeOptional = dnevnoStanjeRepo.findOneByRacunPravnogLicaAndDatumPromene(racun, rtgsNalog.getDatumNaloga());
@@ -33,9 +33,7 @@ public class DnevnoStanjeServiceImpl implements DnevnoStanjeService{
 		else {
 			dnevnoStanje.setPromeneNaTeret(dnevnoStanje.getPromeneNaTeret() + rtgsNalog.getIznos());
 		}
-		dnevnoStanjeRepo.save(dnevnoStanje);
-		
-		return true;
+		return dnevnoStanjeRepo.save(dnevnoStanje);
 
 	}
 

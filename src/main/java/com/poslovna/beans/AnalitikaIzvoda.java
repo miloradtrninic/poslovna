@@ -39,7 +39,7 @@ public class AnalitikaIzvoda {
 	private VrstaPlacanja vrstaPlacanja;
 	
 	@ManyToOne()
-	private Set<DnevnoStanje> dnevnaStanja;
+	private DnevnoStanje dnevnoStanje;
 	@ManyToOne()
 	private Set<Valuta> valute;
 }

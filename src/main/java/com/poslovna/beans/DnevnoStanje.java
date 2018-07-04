@@ -28,6 +28,6 @@ public class DnevnoStanje {
 	private Set<AnalitikaIzvoda> izvodi;
 	@ManyToOne()
 	private RacunPravnogLica racunPravnogLica;
-	@OneToMany(mappedBy="dnevnaStanja")
+	@OneToMany(mappedBy="dnevnoStanje")
 	private AnalitikaIzvoda analitikaIzvoda;
 }
