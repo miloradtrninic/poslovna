@@ -21,6 +21,9 @@ public class RtgsServiceImpl implements RtgsService{
 
 	@Autowired
 	private PorukaService porukaService;
+	
+	@Autowired
+	private AnalitikaIzvodaService analitikaIzvodaService;
 
 	@Override
 	public boolean proccessRtgs(RtgsCreation rtgsNalog) {
@@ -47,8 +50,10 @@ public class RtgsServiceImpl implements RtgsService{
 		RacunPravnogLica racunPoverioca = racunPravnogLicaRepo.findOneByBrojRacuna(rtgsNalog.getRacunPoverioca());
 		dnevnoStanjeService.changeDnevnoStanje(rtgsNalog, racunPoverioca, true);
 
+		analitikaIzvodaService.createAnalitikaIzvoda(rtgsNalog, racunDuznika, racunPoverioca, dnevnoStanjePoverioca, true);
+		analitikaIzvodaService.createAnalitikaIzvoda(rtgsNalog, racunDuznika, racunPoverioca, dnevnoStanjeDuznika, true);
+		
 		return true;
-
 	}
 
 }
