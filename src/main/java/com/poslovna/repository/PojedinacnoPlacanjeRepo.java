@@ -1,6 +1,9 @@
 package com.poslovna.repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface PojedinacnoPlacanjeRepo {
+import com.poslovna.beans.PojedinacnoPlacanje;
+
+public interface PojedinacnoPlacanjeRepo extends PagingAndSortingRepository<PojedinacnoPlacanje, Long>{
 
 }

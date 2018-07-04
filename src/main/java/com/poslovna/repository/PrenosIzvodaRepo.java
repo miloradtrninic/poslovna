@@ -1,6 +1,9 @@
 package com.poslovna.repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface PrenosIzvodaRepo {
+import com.poslovna.beans.PrenosIzvoda;
+
+public interface PrenosIzvodaRepo extends PagingAndSortingRepository<PrenosIzvoda, Long>{
 
 }

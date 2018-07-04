@@ -1,6 +1,9 @@
 package com.poslovna.repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface KursValutaRepo {
+import com.poslovna.beans.KursValuta;
+
+public interface KursValutaRepo extends PagingAndSortingRepository<KursValuta, Long>{
 
 }

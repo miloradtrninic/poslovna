@@ -1,6 +1,9 @@
 package com.poslovna.repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface PravnaLicaRepo {
+import com.poslovna.beans.PravnaLica;
+
+public interface PravnaLicaRepo extends PagingAndSortingRepository<PravnaLica, String>{
 
 }

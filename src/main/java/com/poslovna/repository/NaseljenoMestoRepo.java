@@ -1,6 +1,9 @@
 package com.poslovna.repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface NaseljenoMestoRepo {
+import com.poslovna.beans.NaseljenoMesto;
+
+public interface NaseljenoMestoRepo extends PagingAndSortingRepository<NaseljenoMesto, Long>{
 
 }

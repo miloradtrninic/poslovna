@@ -1,6 +1,9 @@
 package com.poslovna.repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface DrzavaRepo {
+import com.poslovna.beans.Drzava;
+
+public interface DrzavaRepo extends PagingAndSortingRepository<Drzava, Long>{
 
 }

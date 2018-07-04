@@ -1,6 +1,9 @@
 package com.poslovna.repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface KursnaListaRepo {
+import com.poslovna.beans.KursnaLista;
+
+public interface KursnaListaRepo extends PagingAndSortingRepository<KursnaLista, Long>{
 
 }
