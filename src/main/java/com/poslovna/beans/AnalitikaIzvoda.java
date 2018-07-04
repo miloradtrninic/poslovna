@@ -41,5 +41,5 @@ public class AnalitikaIzvoda {
 	@ManyToOne()
 	private DnevnoStanje dnevnoStanje;
 	@ManyToOne()
-	private Set<Valuta> valute;
+	private Valuta valuta;
 }
