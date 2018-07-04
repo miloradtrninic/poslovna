@@ -1,6 +1,9 @@
 package com.poslovna.repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface PorukaRepo {
+import com.poslovna.beans.Poruka;
+
+public interface PorukaRepo extends PagingAndSortingRepository<Poruka, Long>{
 
 }

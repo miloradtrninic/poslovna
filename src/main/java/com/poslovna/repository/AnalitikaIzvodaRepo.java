@@ -1,6 +1,9 @@
 package com.poslovna.repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface AnalitikaIzvodaRepo {
+import com.poslovna.beans.AnalitikaIzvoda;
+
+public interface AnalitikaIzvodaRepo extends PagingAndSortingRepository<AnalitikaIzvoda, Long> {
 
 }

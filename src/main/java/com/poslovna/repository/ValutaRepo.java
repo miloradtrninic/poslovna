@@ -1,6 +1,9 @@
 package com.poslovna.repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface ValutaRepo {
+import com.poslovna.beans.Valuta;
+
+public interface ValutaRepo extends PagingAndSortingRepository<Valuta, String> {
 
 }

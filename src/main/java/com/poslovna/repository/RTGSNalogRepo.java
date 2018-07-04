@@ -1,6 +1,9 @@
 package com.poslovna.repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface RTGSNalogRepo {
+import com.poslovna.beans.RTGSNalog;
+
+public interface RTGSNalogRepo extends PagingAndSortingRepository<RTGSNalog, Long> {
 
 }

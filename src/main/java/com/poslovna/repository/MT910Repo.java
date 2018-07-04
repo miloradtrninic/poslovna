@@ -1,6 +1,9 @@
 package com.poslovna.repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface MT910Repo {
+import com.poslovna.beans.MT910;
+
+public interface MT910Repo extends PagingAndSortingRepository<MT910, Long> {
 
 }

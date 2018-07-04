@@ -1,6 +1,9 @@
 package com.poslovna.repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface UkidanjeRepo {
+import com.poslovna.beans.Ukidanje;
+
+public interface UkidanjeRepo extends PagingAndSortingRepository<Ukidanje, Long> {
 
 }
