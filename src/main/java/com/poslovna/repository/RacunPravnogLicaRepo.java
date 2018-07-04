@@ -1,6 +1,9 @@
 package com.poslovna.repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface RacunPravnogLicaRepo {
+import com.poslovna.beans.RacunPravnogLica;
 
+public interface RacunPravnogLicaRepo extends PagingAndSortingRepository<RacunPravnogLica, String>{
+	RacunPravnogLica findOneByBrojRacuna(String brojRacuna);
 }

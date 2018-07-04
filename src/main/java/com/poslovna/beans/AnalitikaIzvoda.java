@@ -1,6 +1,7 @@
 package com.poslovna.beans;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,4 +37,9 @@ public class AnalitikaIzvoda {
 	private NaseljenoMesto naseljenoMesto;
 	@ManyToOne(optional=false)
 	private VrstaPlacanja vrstaPlacanja;
+	
+	@ManyToOne()
+	private Set<DnevnoStanje> dnevnaStanja;
+	@ManyToOne()
+	private Set<Valuta> valute;
 }

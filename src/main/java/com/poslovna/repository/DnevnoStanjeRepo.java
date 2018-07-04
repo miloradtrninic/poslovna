@@ -1,6 +1,13 @@
 package com.poslovna.repository;
 
+import java.util.Date;
+import java.util.Optional;
 
-public interface DnevnoStanjeRepo {
+import org.springframework.data.repository.PagingAndSortingRepository;
 
+import com.poslovna.beans.DnevnoStanje;
+import com.poslovna.beans.RacunPravnogLica;
+
+public interface DnevnoStanjeRepo extends PagingAndSortingRepository<DnevnoStanje, Long>{
+	Optional<DnevnoStanje> findOneByRacunPravnogLicaAndDatumPromene(RacunPravnogLica racunPravnogLica, Date datumPromene);
 }

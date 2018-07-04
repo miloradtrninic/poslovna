@@ -14,7 +14,6 @@ import lombok.Setter;
 @Entity @Getter @Setter @NoArgsConstructor
 @DiscriminatorValue(value="false")
 public class Banka extends PravnaLica {
-	private String obracunskiRacun;
 	private Integer sifraBanke;
 	private String swift;
 	@OneToMany(orphanRemoval=true, fetch=FetchType.LAZY)

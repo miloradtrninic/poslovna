@@ -1,6 +1,9 @@
 package com.poslovna.repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface BankaRepo {
+import com.poslovna.beans.Banka;
 
+public interface BankaRepo extends PagingAndSortingRepository<Banka, String>{
+	Banka findOneBySwift(String swift);
 }

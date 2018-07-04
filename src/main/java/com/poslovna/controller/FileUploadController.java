@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,10 +21,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.poslovna.dto.RtgsCreation;
+import com.poslovna.services.RtgsService;
 
 @RestController
 @RequestMapping(value = "/upload")
 public class FileUploadController {
+	@Autowired
+	private RtgsService rtgsService;
 
 	@PostMapping(value = "/rtgs")
 	public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) {
@@ -40,9 +44,6 @@ public class FileUploadController {
 		    
 		    RtgsCreation rtgsCreation = xmlMapper.readValue(rtgsXml, RtgsCreation.class);
 		    
-		    System.out.println("RTGS CREATION:");
-		    System.out.println(rtgsCreation.getId());
-		    System.out.println(rtgsCreation.getModelOdobrenja());
 			
 			
 			return new ResponseEntity<>(HttpStatus.OK);

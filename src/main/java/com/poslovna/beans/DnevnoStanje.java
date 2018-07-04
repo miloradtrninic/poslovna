@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import lombok.Getter;
@@ -25,4 +26,8 @@ public class DnevnoStanje {
 	private Double promeneNaTeret;
 	@OneToMany(orphanRemoval=true, fetch=FetchType.LAZY)
 	private Set<AnalitikaIzvoda> izvodi;
+	@ManyToOne()
+	private RacunPravnogLica racunPravnogLica;
+	@OneToMany(mappedBy="dnevnaStanja")
+	private AnalitikaIzvoda analitikaIzvoda;
 }

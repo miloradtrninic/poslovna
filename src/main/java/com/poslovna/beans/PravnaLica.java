@@ -1,7 +1,10 @@
 package com.poslovna.beans;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,4 +21,7 @@ public class PravnaLica {
 	private String telefon;
 	private String fax;
 	private Boolean firma;
+	
+	@OneToMany(mappedBy="vlasnik")
+	private Set<RacunPravnogLica> racuni;
 }
