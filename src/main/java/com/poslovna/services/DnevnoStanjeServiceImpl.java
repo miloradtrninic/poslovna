@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.poslovna.beans.DnevnoStanje;
-import com.poslovna.beans.RacunPravnogLica;
+import com.poslovna.beans.ObracunskiRacunBanke;
 import com.poslovna.dto.RtgsCreation;
 import com.poslovna.repository.DnevnoStanjeRepo;
 
@@ -15,7 +15,7 @@ public class DnevnoStanjeServiceImpl implements DnevnoStanjeService{
 	private DnevnoStanjeRepo dnevnoStanjeRepo;
 
 	@Override
-	public DnevnoStanje changeDnevnoStanje(RtgsCreation rtgsNalog, RacunPravnogLica racun, boolean uKorist) {
+	public DnevnoStanje changeDnevnoStanje(RtgsCreation rtgsNalog, ObracunskiRacunBanke racun, boolean uKorist) {
 
 		DnevnoStanje dnevnoStanje = new DnevnoStanje();
 		Optional<DnevnoStanje> dnevnoStanjeOptional = dnevnoStanjeRepo.findOneByRacunPravnogLicaAndDatumPromene(racun, rtgsNalog.getDatumNaloga());

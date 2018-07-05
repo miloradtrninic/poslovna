@@ -27,7 +27,7 @@ public class DnevnoStanje {
 	@OneToMany(orphanRemoval=true, fetch=FetchType.LAZY)
 	private Set<AnalitikaIzvoda> izvodi;
 	@ManyToOne()
-	private RacunPravnogLica racunPravnogLica;
+	private ObracunskiRacunBanke racunPravnogLica;
 	@OneToMany(mappedBy="dnevnoStanje")
 	private AnalitikaIzvoda analitikaIzvoda;
 }

@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.poslovna.beans.DnevnoStanje;
-import com.poslovna.beans.RacunPravnogLica;
+import com.poslovna.beans.ObracunskiRacunBanke;
 
 public interface DnevnoStanjeRepo extends PagingAndSortingRepository<DnevnoStanje, Long>{
-	Optional<DnevnoStanje> findOneByRacunPravnogLicaAndDatumPromene(RacunPravnogLica racunPravnogLica, Date datumPromene);
+	Optional<DnevnoStanje> findOneByRacunPravnogLicaAndDatumPromene(ObracunskiRacunBanke racunPravnogLica, Date datumPromene);
 }

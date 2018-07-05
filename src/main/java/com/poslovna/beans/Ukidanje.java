@@ -17,9 +17,9 @@ public class Ukidanje {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@ManyToOne(optional=false)
-	private RacunPravnogLica ukidaSe;
+	private ObracunskiRacunBanke ukidaSe;
 	private Date datumUkidanja;
 	@ManyToOne(optional=true)
-	private RacunPravnogLica naRacun;
+	private ObracunskiRacunBanke naRacun;
 	
 }

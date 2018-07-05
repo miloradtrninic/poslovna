@@ -1,8 +1,6 @@
 package com.poslovna.beans;
 
 import java.util.Date;
-import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,29 +15,25 @@ import lombok.Setter;
 public class AnalitikaIzvoda {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	private String svrhaPlacanja;
-	private Date primljen;
 	private Date datumValute;
-	private Integer modelZaduzenja;
-	private String pozivNaBroj;
-	private Integer modelOdobrenja;
-	private String pozivNaBrojOdobrenja;
-	private Boolean hitno;
 	private Double iznos;
-	private Integer status;
-	private Integer tipGreske;
-	
+	private String greska;
 	@ManyToOne(optional=false)
-	private RacunPravnogLica duznik;
+	private ObracunskiRacunBanke duznik;
 	@ManyToOne(optional=false)
-	private RacunPravnogLica poverilac;
-	@ManyToOne(optional=false)
-	private NaseljenoMesto naseljenoMesto;
+	private ObracunskiRacunBanke poverilac;
 	@ManyToOne(optional=false)
 	private VrstaPlacanja vrstaPlacanja;
-	
 	@ManyToOne()
 	private DnevnoStanje dnevnoStanje;
 	@ManyToOne()
 	private Valuta valuta;
+	private String svrhaPlacanja;
+	private Date datumNaloga;
+	private int modelZaduzenja;
+	private String pozivNaBrojZaduzenja;
+	private String pozivNaBrojOdobrenja;
+	private int modelOdobrenja;
+	private String racunDuznika;
+	private String racunPoverioca;
 }
