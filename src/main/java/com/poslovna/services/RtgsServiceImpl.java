@@ -1,5 +1,7 @@
 package com.poslovna.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,8 +33,8 @@ public class RtgsServiceImpl implements RtgsService{
 
 	@Override
 	public boolean proccessRtgs(RtgsCreation rtgsNalog) {
-		Banka bankaDuznik = bankaRepo.findOneBySwift(rtgsNalog.getSwiftDuznika());
-		Banka bankaPoverioca = bankaRepo.findOneBySwift(rtgsNalog.getSwiftPoverioca());
+		Optional<Banka> bankaDuznik = bankaRepo.findOneBySwift(rtgsNalog.getSwiftDuznika());
+		Optional<Banka> bankaPoverioca = bankaRepo.findOneBySwift(rtgsNalog.getSwiftPoverioca());
 		
 		//Rezervacija novaca na racunu duznika
 		ObracunskiRacunBanke racunDuznika = racunPravnogLicaRepo.findOneByBrojRacuna(rtgsNalog.getRacunDuznika());
@@ -47,8 +49,8 @@ public class RtgsServiceImpl implements RtgsService{
 		DnevnoStanje dnevnoStanjePoverioca = dnevnoStanjeService.changeDnevnoStanje(rtgsNalog, racunBankePoverioca, true);
 
 		//Kreiranje poruke o zaduzenju (MT900) i poruke o odobrenju (MT910)
-		porukaService.createMT900(rtgsNalog, bankaDuznik);
-		porukaService.createMT910(rtgsNalog, bankaPoverioca);
+		porukaService.createMT900(rtgsNalog, bankaDuznik.get());
+		porukaService.createMT910(rtgsNalog, bankaPoverioca.get());
 
 		//Uplata novaca na racun poverioca
 		ObracunskiRacunBanke racunPoverioca = racunPravnogLicaRepo.findOneByBrojRacuna(rtgsNalog.getRacunPoverioca());

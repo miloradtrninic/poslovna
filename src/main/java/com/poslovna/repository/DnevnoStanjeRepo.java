@@ -10,4 +10,5 @@ import com.poslovna.beans.ObracunskiRacunBanke;
 
 public interface DnevnoStanjeRepo extends PagingAndSortingRepository<DnevnoStanje, Long>{
 	Optional<DnevnoStanje> findOneByRacunPravnogLicaAndDatumPromene(ObracunskiRacunBanke racunPravnogLica, Date datumPromene);
+	Optional<DnevnoStanje> findFirstByRacunPravnogLicaOrderByDatumPromeneDesc(ObracunskiRacunBanke obracunskiRacunBanke);
 }
