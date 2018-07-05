@@ -1,6 +1,8 @@
 package com.poslovna.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.poslovna.beans.Banka;
 import com.poslovna.beans.DnevnoStanje;
@@ -9,6 +11,8 @@ import com.poslovna.dto.RtgsCreation;
 import com.poslovna.repository.BankaRepo;
 import com.poslovna.repository.ObracunskiRacunBankeRepo;
 
+@Service
+@Transactional
 public class RtgsServiceImpl implements RtgsService{
 	@Autowired
 	private BankaRepo bankaRepo;

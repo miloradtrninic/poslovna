@@ -2,17 +2,15 @@ package com.poslovna.controller;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.nio.file.Files;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,18 +32,12 @@ public class FileUploadController {
 		File f = null;
 		try {
 			System.out.println("Uploaded file name: " + file.getOriginalFilename());
-			
 			f= Files.createTempFile("temp", file.getOriginalFilename()).toFile();
 			file.transferTo(f);
-			
-			
 		    XmlMapper xmlMapper = new XmlMapper();
 		    String rtgsXml = inputStreamToString(new FileInputStream(f));
-		    
 		    RtgsCreation rtgsCreation = xmlMapper.readValue(rtgsXml, RtgsCreation.class);
-		    
-			
-			
+		    rtgsService.proccessRtgs(rtgsCreation);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

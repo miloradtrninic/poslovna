@@ -3,12 +3,16 @@ package com.poslovna.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.poslovna.beans.DnevnoStanje;
 import com.poslovna.beans.ObracunskiRacunBanke;
 import com.poslovna.dto.RtgsCreation;
 import com.poslovna.repository.DnevnoStanjeRepo;
 
+@Service
+@Transactional
 public class DnevnoStanjeServiceImpl implements DnevnoStanjeService{
 
 	@Autowired 

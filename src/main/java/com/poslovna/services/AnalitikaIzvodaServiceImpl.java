@@ -3,6 +3,8 @@ package com.poslovna.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.poslovna.beans.AnalitikaIzvoda;
 import com.poslovna.beans.DnevnoStanje;
@@ -12,6 +14,8 @@ import com.poslovna.dto.RtgsCreation;
 import com.poslovna.repository.AnalitikaIzvodaRepo;
 import com.poslovna.repository.ValutaRepo;
 
+@Service
+@Transactional
 public class AnalitikaIzvodaServiceImpl implements AnalitikaIzvodaService{
 	@Autowired
 	private AnalitikaIzvodaRepo analitikaIzvodaRepo;

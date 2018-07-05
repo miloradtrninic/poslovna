@@ -29,5 +29,5 @@ public class DnevnoStanje {
 	@ManyToOne()
 	private ObracunskiRacunBanke racunPravnogLica;
 	@OneToMany(mappedBy="dnevnoStanje")
-	private AnalitikaIzvoda analitikaIzvoda;
+	private Set<AnalitikaIzvoda> analitikeIzvoda;
 }

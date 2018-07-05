@@ -18,7 +18,7 @@ public class ObracunskiRacunBanke {
 	private String brojRacuna;
 	private Date datumOtvaranja;
 	private Boolean vazeci;
-	private Double stanje;
+	private Double dozvoljeniMinus;
 	@ManyToOne(optional=false)
 	private Valuta valuta;
 	@OneToMany(mappedBy="racunPravnogLica")

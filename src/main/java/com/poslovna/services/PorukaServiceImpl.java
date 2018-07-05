@@ -3,6 +3,8 @@ package com.poslovna.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.poslovna.beans.Banka;
 import com.poslovna.beans.MT900;
@@ -12,6 +14,8 @@ import com.poslovna.dto.RtgsCreation;
 import com.poslovna.repository.PorukaRepo;
 import com.poslovna.repository.ValutaRepo;
 
+@Service
+@Transactional
 public class PorukaServiceImpl implements PorukaService{
 	@Autowired
 	private PorukaRepo porukaRepo;
