@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.poslovna.beans.AnalitikaIzvoda;
 import com.poslovna.beans.Banka;
 import com.poslovna.beans.DnevnoStanje;
-import com.poslovna.beans.Valuta;
 import com.poslovna.dto.ClearingCreation;
+import com.poslovna.dto.PojedinacnoPlacanjeCreation;
 import com.poslovna.exceptions.NelikvidanException;
 import com.poslovna.exceptions.NepostojecaBankaException;
 import com.poslovna.exceptions.NepoznataValutaExceptio;
@@ -71,7 +71,7 @@ public class ClearingServiceImpl implements ClearingSerivce{
 		Double sumaPlacanja = clearing.getPlacanja().stream()
 									  .mapToDouble(p -> p.getIznos())
 									  .sum();
-		if(sumaPlacanja == clearing.getIznos()) {
+		if(sumaPlacanja == clearing.getUkupanIznos()) {
 			throw new PojedinacnoPlacanjeException("Suma iznosa pojedinacnih placanja nije jednaka sumi kliringa.");
 		}
 		if(!placanjaPrevelika.isEmpty()) {
@@ -80,29 +80,29 @@ public class ClearingServiceImpl implements ClearingSerivce{
 		Optional<DnevnoStanje> dnevnoStanjeDuznikOpt = dnevnoStanjeRepo.findFirstByRacunPravnogLicaOrderByDatumPromeneDesc(duznik.get().getRacun());
 		DnevnoStanje dnevnoStanjeDuznik = new DnevnoStanje();
 		if(!dnevnoStanjeDuznikOpt.isPresent()) {
-			if(duznik.get().getRacun().getDozvoljeniMinus() < clearing.getIznos()) {
+			if(duznik.get().getRacun().getDozvoljeniMinus() < clearing.getUkupanIznos()) {
 				throw new NelikvidanException("Banka duznik nema dovoljno sredstava.");
 			} else {
 				dnevnoStanjeDuznik = new DnevnoStanje();
 				dnevnoStanjeDuznik.setDatumPromene(new Date());
 				dnevnoStanjeDuznik.setPrethodnoStanje(0.0);
-				dnevnoStanjeDuznik.setNovoStanje(-clearing.getIznos());
-				dnevnoStanjeDuznik.setPromeneNaTeret(clearing.getIznos());
+				dnevnoStanjeDuznik.setNovoStanje(-clearing.getUkupanIznos());
+				dnevnoStanjeDuznik.setPromeneNaTeret(clearing.getUkupanIznos());
 				dnevnoStanjeDuznik.setPromeneUKorist(0.0);
 			}
-		} else if(dnevnoStanjeDuznikOpt.get().getNovoStanje() + duznik.get().getRacun().getDozvoljeniMinus() < clearing.getIznos()) {
+		} else if(dnevnoStanjeDuznikOpt.get().getNovoStanje() + duznik.get().getRacun().getDozvoljeniMinus() < clearing.getUkupanIznos()) {
 			throw new NelikvidanException("Banka duznik nema dovoljno sredstava.");
 		}
 		dnevnoStanjeDuznik = dnevnoStanjeDuznikOpt.get();
 		if(dnevnoStanjeDuznikOpt.get().getDatumPromene().after(danasnjiDan.getTime())) {
-			dnevnoStanjeDuznik.setNovoStanje(dnevnoStanjeDuznikOpt.get().getNovoStanje() - clearing.getIznos());
-			dnevnoStanjeDuznik.setPromeneNaTeret(dnevnoStanjeDuznikOpt.get().getPromeneNaTeret() + clearing.getIznos());
+			dnevnoStanjeDuznik.setNovoStanje(dnevnoStanjeDuznikOpt.get().getNovoStanje() - clearing.getUkupanIznos());
+			dnevnoStanjeDuznik.setPromeneNaTeret(dnevnoStanjeDuznikOpt.get().getPromeneNaTeret() + clearing.getUkupanIznos());
 		} else {
 			dnevnoStanjeDuznik = new DnevnoStanje();
 			dnevnoStanjeDuznik.setDatumPromene(new Date());
 			dnevnoStanjeDuznik.setPrethodnoStanje(dnevnoStanjeDuznikOpt.get().getNovoStanje());
-			dnevnoStanjeDuznik.setNovoStanje(dnevnoStanjeDuznikOpt.get().getNovoStanje() - clearing.getIznos());
-			dnevnoStanjeDuznik.setPromeneNaTeret(clearing.getIznos());
+			dnevnoStanjeDuznik.setNovoStanje(dnevnoStanjeDuznikOpt.get().getNovoStanje() - clearing.getUkupanIznos());
+			dnevnoStanjeDuznik.setPromeneNaTeret(clearing.getUkupanIznos());
 			dnevnoStanjeDuznik.setPromeneUKorist(0.0);
 		}
 		
@@ -111,29 +111,34 @@ public class ClearingServiceImpl implements ClearingSerivce{
 		if(dnevnoStanjePoverilacOpt.isPresent()) {
 			if(dnevnoStanjePoverilacOpt.get().getDatumPromene().after(danasnjiDan.getTime())) {
 				dnevnoStanjePoverilac = dnevnoStanjePoverilacOpt.get();
-				dnevnoStanjePoverilacOpt.get().setNovoStanje(dnevnoStanjePoverilacOpt.get().getNovoStanje() + clearing.getIznos());
+				dnevnoStanjePoverilacOpt.get().setNovoStanje(dnevnoStanjePoverilacOpt.get().getNovoStanje() + clearing.getUkupanIznos());
 			} else {
 				dnevnoStanjePoverilac.setDatumPromene(new Date());
-				dnevnoStanjePoverilac.setNovoStanje(clearing.getIznos());
+				dnevnoStanjePoverilac.setNovoStanje(clearing.getUkupanIznos());
 				dnevnoStanjePoverilac.setPrethodnoStanje(dnevnoStanjePoverilacOpt.get().getNovoStanje());
 				dnevnoStanjePoverilac.setRacunPravnogLica(poverilac.get().getRacun());
 			}
 		} else {
 			dnevnoStanjePoverilac.setDatumPromene(new Date());
-			dnevnoStanjePoverilac.setNovoStanje(clearing.getIznos());
+			dnevnoStanjePoverilac.setNovoStanje(clearing.getUkupanIznos());
 			dnevnoStanjePoverilac.setPrethodnoStanje(0.0);
 			dnevnoStanjePoverilac.setRacunPravnogLica(poverilac.get().getRacun());
 			
 		}
 		dnevnoStanjeRepo.save(dnevnoStanjeDuznik);
 		dnevnoStanjeRepo.save(dnevnoStanjePoverilac);
-		AnalitikaIzvoda analitika = analitikaService
-				.createAnalitikaIzvoda(clearing.getSifraValute(), 
-									   clearing.getDatumValute(),
-									   clearing.getIznos(),
-									   dnevnoStanjeDuznik,
-									   dnevnoStanjePoverilac,
-									   "Clearing & Settlement");
+		for(PojedinacnoPlacanjeCreation placanje:clearing.getPlacanja()) {
+			AnalitikaIzvoda analitika = analitikaService
+					.createAnalitikaIzvoda(placanje.getSifraValute(), 
+										   clearing.getDatumValute(),
+										   placanje.getIznos(),
+										   dnevnoStanjeDuznik,
+										   dnevnoStanjePoverilac,
+										   placanje.getSvrha(),
+										   clearing.getRacunDuznik(),
+										   clearing.getRacunPoverilac());
+		}
+		
 		
 		
 	}

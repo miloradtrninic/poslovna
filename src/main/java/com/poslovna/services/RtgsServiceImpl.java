@@ -57,8 +57,9 @@ public class RtgsServiceImpl implements RtgsService{
 		ObracunskiRacunBanke racunPoverioca = racunPravnogLicaRepo.findOneByBrojRacuna(rtgsNalog.getRacunPoverioca());
 		dnevnoStanjeService.changeDnevnoStanje(rtgsNalog, racunPoverioca, true);
 
-		analitikaIzvodaService.createAnalitikaIzvoda(rtgsNalog.getSifraValute(), rtgsNalog.getDatumValute(), rtgsNalog.getIznos(), dnevnoStanjeDuznika, dnevnoStanjePoverioca, "RTGS");
-		
+		analitikaIzvodaService.createAnalitikaIzvoda(rtgsNalog.getSifraValute(), rtgsNalog.getDatumValute(), rtgsNalog.getIznos(),
+				dnevnoStanjeDuznika, dnevnoStanjePoverioca, rtgsNalog.getSvrhaPlacanja(), rtgsNalog.getRacunDuznika(), rtgsNalog.getRacunPoverioca());
+
 		return true;
 	}
 

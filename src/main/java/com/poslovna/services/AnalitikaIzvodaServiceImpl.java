@@ -24,13 +24,18 @@ public class AnalitikaIzvodaServiceImpl implements AnalitikaIzvodaService{
 	private ValutaRepo valutaRepo;
 
 	@Override
-	public AnalitikaIzvoda createAnalitikaIzvoda(String sifraValute, Date datumValute, double iznos, DnevnoStanje dnevnoStanjeDuznik, DnevnoStanje dnevnoStanjePoverilac, String svrha) throws NepoznataValutaExceptio {
+	public AnalitikaIzvoda createAnalitikaIzvoda(String sifraValute, Date datumValute,
+			  double iznos, DnevnoStanje dnevnoStanjeDuznik, 
+			  DnevnoStanje dnevnoStanjePoverilac, String svrha,
+			  String racunDuznika, String racunPoverioca) throws NepoznataValutaExceptio {
 		AnalitikaIzvoda analitika = new AnalitikaIzvoda();
 		analitika.setDatumValute(datumValute);
 		analitika.setDnevnoStanjeDuznik(dnevnoStanjeDuznik);
 		analitika.setDnevnoStanjePoverilac(dnevnoStanjePoverilac);
 		analitika.setIznos(iznos);
 		analitika.setSvrhaPlacanja(svrha);
+		analitika.setRacunDuznika(racunDuznika);
+		analitika.setRacunPoverioca(racunPoverioca);
 		Optional<Valuta> valuta = valutaRepo.findById(sifraValute);
 		if(!valuta.isPresent())
 			throw new NepoznataValutaExceptio("Valuta sa sifrom " + sifraValute + " ne postoji");

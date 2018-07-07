@@ -26,4 +26,6 @@ public class AnalitikaIzvoda {
 	private DnevnoStanje dnevnoStanjePoverilac;
 	@ManyToOne(optional=false)
 	private Valuta valuta;
+	private String racunDuznika;
+	private String racunPoverioca;
 }

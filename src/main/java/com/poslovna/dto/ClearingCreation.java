@@ -13,7 +13,7 @@ public class ClearingCreation {
 	private String racunDuznik;
 	private String switftPoverilac;
 	private String racunPoverilac;
-	private Double iznos;
+	private Double ukupanIznos;
 	private String sifraValute;
 	private Date datumValute;
 	private Date datum;

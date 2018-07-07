@@ -18,5 +18,8 @@ public interface AnalitikaIzvodaService {
 	 * @return
 	 * @throws NepoznataValutaExceptio
 	 */
-	AnalitikaIzvoda createAnalitikaIzvoda(String sifraValute, Date datumValute, double iznos, DnevnoStanje dnevnoStanjeDuznik, DnevnoStanje dnevnoStanjePoverilac, String svrha) throws NepoznataValutaExceptio;
+	AnalitikaIzvoda createAnalitikaIzvoda(String sifraValute, Date datumValute,
+										  double iznos, DnevnoStanje dnevnoStanjeDuznik, 
+										  DnevnoStanje dnevnoStanjePoverilac, String svrha,
+										  String racunDuznika, String racunPoverioca) throws NepoznataValutaExceptio;
 }

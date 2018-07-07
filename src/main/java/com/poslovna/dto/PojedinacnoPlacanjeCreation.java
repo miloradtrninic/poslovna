@@ -9,15 +9,15 @@ import lombok.Setter;
 public class PojedinacnoPlacanjeCreation {
 	private String id;
 	private String duznik;
-	private String svrha;
 	private String primalac;
+	private String svrha;
 	private Date datumNaloga;
-	private String racunDuznika;
 	private Integer modelZaduzenja;
 	private String pozivNaBrojZaduzenja;
-	private String racunPoverioca;
 	private Integer modelOdobrenja;
+	private String sifraValute;
 	private String pozivNaBrojOdobrenja;
 	private Double iznos;
-	private String sifraValute;
+	private String racunPoverioca;
+	private String racunDuznika;
 }
