@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,7 @@ public class Ukidanje {
 	private Long id;
 	@ManyToOne(optional=false)
 	private ObracunskiRacunBanke ukidaSe;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date datumUkidanja;
 	@ManyToOne(optional=true)
 	private ObracunskiRacunBanke naRacun;

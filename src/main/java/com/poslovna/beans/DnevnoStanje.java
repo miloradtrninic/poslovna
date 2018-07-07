@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,15 +21,12 @@ import lombok.Setter;
 public class DnevnoStanje {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date datumPromene;
 	private Double prethodnoStanje;
 	private Double novoStanje;
 	private Double promeneUKorist;
 	private Double promeneNaTeret;
-	@OneToMany(orphanRemoval=true, fetch=FetchType.LAZY)
-	private Set<AnalitikaIzvoda> izvodi;
-	@ManyToOne()
+	@ManyToOne
 	private ObracunskiRacunBanke racunPravnogLica;
-	@OneToMany(mappedBy="dnevnoStanje")
-	private Set<AnalitikaIzvoda> analitikeIzvoda;
 }

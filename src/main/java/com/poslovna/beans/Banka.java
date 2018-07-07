@@ -2,6 +2,7 @@ package com.poslovna.beans;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,14 +18,21 @@ import lombok.Setter;
 public class Banka{
 	@Id
 	private String PIB;
+	@Column(length=50, nullable=false)
 	private String naziv;
+	@Column(length=50, nullable=false)
 	private String adresa;
+	@Column(length=50, nullable=false)
 	private String email;
+	@Column(length=30, nullable=false)
 	private String web;
+	@Column(length=10, nullable=false)
 	private String telefon;
+	@Column(length=10, nullable=false)
 	private String fax;
 	private Boolean firma;
 	private Integer sifraBanke;
+	@Column(columnDefinition="CHAR(8)")
 	private String swift;
 	@OneToOne(orphanRemoval=true, fetch=FetchType.EAGER)
 	private ObracunskiRacunBanke racun;
