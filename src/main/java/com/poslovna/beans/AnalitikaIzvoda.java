@@ -18,22 +18,12 @@ public class AnalitikaIzvoda {
 	private Date datumValute;
 	private Double iznos;
 	private String greska;
-	@ManyToOne(optional=false)
-	private ObracunskiRacunBanke duznik;
-	@ManyToOne(optional=false)
-	private ObracunskiRacunBanke poverilac;
-	@ManyToOne(optional=false)
-	private VrstaPlacanja vrstaPlacanja;
-	@ManyToOne()
-	private DnevnoStanje dnevnoStanje;
-	@ManyToOne()
-	private Valuta valuta;
 	private String svrhaPlacanja;
 	private Date datumNaloga;
-	private int modelZaduzenja;
-	private String pozivNaBrojZaduzenja;
-	private String pozivNaBrojOdobrenja;
-	private int modelOdobrenja;
-	private String racunDuznika;
-	private String racunPoverioca;
+	@ManyToOne(optional=false)
+	private DnevnoStanje dnevnoStanjeDuznik;
+	@ManyToOne(optional=false)
+	private DnevnoStanje dnevnoStanjePoverilac;
+	@ManyToOne(optional=false)
+	private Valuta valuta;
 }

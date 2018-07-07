@@ -10,6 +10,7 @@ import com.poslovna.beans.Banka;
 import com.poslovna.beans.DnevnoStanje;
 import com.poslovna.beans.ObracunskiRacunBanke;
 import com.poslovna.dto.RtgsCreation;
+import com.poslovna.exceptions.NepoznataValutaExceptio;
 import com.poslovna.repository.BankaRepo;
 import com.poslovna.repository.ObracunskiRacunBankeRepo;
 
@@ -32,7 +33,7 @@ public class RtgsServiceImpl implements RtgsService{
 	private AnalitikaIzvodaService analitikaIzvodaService;
 
 	@Override
-	public boolean proccessRtgs(RtgsCreation rtgsNalog) {
+	public boolean proccessRtgs(RtgsCreation rtgsNalog) throws NepoznataValutaExceptio {
 		Optional<Banka> bankaDuznik = bankaRepo.findOneBySwift(rtgsNalog.getSwiftDuznika());
 		Optional<Banka> bankaPoverioca = bankaRepo.findOneBySwift(rtgsNalog.getSwiftPoverioca());
 		
@@ -56,8 +57,7 @@ public class RtgsServiceImpl implements RtgsService{
 		ObracunskiRacunBanke racunPoverioca = racunPravnogLicaRepo.findOneByBrojRacuna(rtgsNalog.getRacunPoverioca());
 		dnevnoStanjeService.changeDnevnoStanje(rtgsNalog, racunPoverioca, true);
 
-		analitikaIzvodaService.createAnalitikaIzvoda(rtgsNalog, racunDuznika, racunPoverioca, dnevnoStanjePoverioca, true);
-		analitikaIzvodaService.createAnalitikaIzvoda(rtgsNalog, racunDuznika, racunPoverioca, dnevnoStanjeDuznika, true);
+		analitikaIzvodaService.createAnalitikaIzvoda(rtgsNalog.getSifraValute(), rtgsNalog.getDatumValute(), rtgsNalog.getIznos(), dnevnoStanjeDuznika, dnevnoStanjePoverioca, "RTGS");
 		
 		return true;
 	}

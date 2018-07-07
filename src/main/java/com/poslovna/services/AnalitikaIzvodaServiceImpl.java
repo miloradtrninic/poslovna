@@ -1,5 +1,6 @@
 package com.poslovna.services;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.poslovna.beans.AnalitikaIzvoda;
 import com.poslovna.beans.DnevnoStanje;
-import com.poslovna.beans.ObracunskiRacunBanke;
 import com.poslovna.beans.Valuta;
-import com.poslovna.dto.RtgsCreation;
+import com.poslovna.exceptions.NepoznataValutaExceptio;
 import com.poslovna.repository.AnalitikaIzvodaRepo;
 import com.poslovna.repository.ValutaRepo;
 
@@ -24,14 +24,16 @@ public class AnalitikaIzvodaServiceImpl implements AnalitikaIzvodaService{
 	private ValutaRepo valutaRepo;
 
 	@Override
-	public AnalitikaIzvoda createAnalitikaIzvoda(RtgsCreation rtgsNalog, ObracunskiRacunBanke racunDuznika, ObracunskiRacunBanke racunPoverioca, DnevnoStanje dnevnoStanje, boolean hitno) {
+	public AnalitikaIzvoda createAnalitikaIzvoda(String sifraValute, Date datumValute, double iznos, DnevnoStanje dnevnoStanjeDuznik, DnevnoStanje dnevnoStanjePoverilac, String svrha) throws NepoznataValutaExceptio {
 		AnalitikaIzvoda analitika = new AnalitikaIzvoda();
-		analitika.setDatumValute(rtgsNalog.getDatumValute());
-		analitika.setDnevnoStanje(dnevnoStanje);
-		analitika.setDuznik(racunDuznika);
-		analitika.setIznos(rtgsNalog.getIznos());
-		analitika.setPoverilac(racunPoverioca);
-		Optional<Valuta> valuta = valutaRepo.findById(rtgsNalog.getSifraValute());
+		analitika.setDatumValute(datumValute);
+		analitika.setDnevnoStanjeDuznik(dnevnoStanjeDuznik);
+		analitika.setDnevnoStanjePoverilac(dnevnoStanjePoverilac);
+		analitika.setIznos(iznos);
+		analitika.setSvrhaPlacanja(svrha);
+		Optional<Valuta> valuta = valutaRepo.findById(sifraValute);
+		if(!valuta.isPresent())
+			throw new NepoznataValutaExceptio("Valuta sa sifrom " + sifraValute + " ne postoji");
 		analitika.setValuta(valuta.get());
 		
 		return analitikaIzvodaRepo.save(analitika);
