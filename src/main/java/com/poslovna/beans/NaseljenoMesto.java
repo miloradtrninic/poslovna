@@ -2,6 +2,8 @@ package com.poslovna.beans;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -11,9 +13,10 @@ import lombok.Setter;
 
 @Entity @Getter @Setter @NoArgsConstructor
 public class NaseljenoMesto {
-	@Id
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	@Column(columnDefinition="CHAR(2)")
-	private Long sifraMesta;
+	private String sifraMesta;
 	@Column(columnDefinition="VARCHAR(20)")
 	private String naziv;
 	@Column(columnDefinition="CHAR(5)")

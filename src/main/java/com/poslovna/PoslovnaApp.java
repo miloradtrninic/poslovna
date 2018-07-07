@@ -40,4 +40,6 @@ public class PoslovnaApp implements WebMvcConfigurer {
 		ModelMapper mm = new ModelMapper();
 		return mm;
 	}
+	
+
 }

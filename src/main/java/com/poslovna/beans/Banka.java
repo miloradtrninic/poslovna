@@ -36,6 +36,6 @@ public class Banka{
 	private String swift;
 	@OneToOne(orphanRemoval=true, fetch=FetchType.EAGER)
 	private ObracunskiRacunBanke racun;
-	@OneToMany(orphanRemoval=true, fetch=FetchType.LAZY)
+	@OneToMany(orphanRemoval=true, fetch=FetchType.LAZY, mappedBy="banka")
 	private Set<KursnaLista> kursneListe;
 }

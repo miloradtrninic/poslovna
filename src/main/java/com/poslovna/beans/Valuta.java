@@ -4,6 +4,7 @@ package com.poslovna.beans;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import lombok.Getter;
@@ -18,5 +19,8 @@ public class Valuta {
 	@Column(columnDefinition="VARCHAR(20)")
 	private String naziv;
 	private Boolean domaca;
+	@ManyToOne(optional=false)
+	private Drzava drzava;
+	
 
 }

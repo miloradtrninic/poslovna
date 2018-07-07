@@ -18,9 +18,9 @@ public class Drzava {
 	private String sifraDrzave;
 	@Column(columnDefinition="VARCHAR(20)")
 	private String nazivDrzave;
-	@OneToMany(mappedBy="drzava")
+	@OneToMany(orphanRemoval=true, mappedBy="drzava")
 	private Set<NaseljenoMesto> naseljenaMesta;
 	
-	@OneToMany(orphanRemoval=true)
+	@OneToMany(orphanRemoval=true, mappedBy="drzava")
 	private Set<Valuta> valute;
 }
