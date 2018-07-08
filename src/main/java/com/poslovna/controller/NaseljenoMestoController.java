@@ -58,7 +58,7 @@ public class NaseljenoMestoController {
 		return ResponseEntity.ok(mapper.map(repo.save(naseljenoMesto), NaseljenoMestoView.class));
 	}
 
-	@PutMapping(value="/edit", produces=MediaType.APPLICATION_JSON_UTF8_VALUE, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PutMapping(value="/update", produces=MediaType.APPLICATION_JSON_UTF8_VALUE, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> edit(@RequestBody NaseljenoMestoView entity) {
 		Optional<NaseljenoMesto> optionalEnt = repo.findById(entity.getId());
 		if(!optionalEnt.isPresent()) {

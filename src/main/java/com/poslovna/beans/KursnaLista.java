@@ -3,6 +3,7 @@ package com.poslovna.beans;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -25,6 +26,8 @@ public class KursnaLista {
 	private Long id;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date primenjujeSeOd;
+	@Column(columnDefinition="VARCHAR(80)")
+	private String nazivKursneListe;
 	@OneToMany(orphanRemoval=true, mappedBy="kursnaLista", fetch=FetchType.EAGER)
 	@Cascade(value=CascadeType.ALL)
 	private Set<KursValuta> valute;
