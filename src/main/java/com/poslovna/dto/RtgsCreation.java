@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor
 public class RtgsCreation {
-	private Long id;
+	private String id;
 	private String svrhaPlacanja;
 	private Date datumNaloga;
 	private Date datumValute;

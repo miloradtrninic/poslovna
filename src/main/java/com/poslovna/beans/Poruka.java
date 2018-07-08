@@ -17,7 +17,7 @@ import lombok.Setter;
 @Entity @Getter @Setter @NoArgsConstructor
 public class Poruka {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Id;
+	private String Id;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date datumValute;
 	private String porukaNalogaId;

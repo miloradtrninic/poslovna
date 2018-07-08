@@ -26,11 +26,10 @@ public class Banka{
 	private String email;
 	@Column(length=30, nullable=false)
 	private String web;
-	@Column(length=10, nullable=false)
+	@Column(length=20, nullable=false)
 	private String telefon;
-	@Column(length=10, nullable=false)
+	@Column(length=20, nullable=false)
 	private String fax;
-	private Boolean firma;
 	private Integer sifraBanke;
 	@Column(columnDefinition="CHAR(8)")
 	private String swift;

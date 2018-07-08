@@ -7,7 +7,7 @@
             <xs:sequence>
                 <xs:element name="Id">
                     <xs:simpleType>
-                        <xs:restriction base="xs:long"></xs:restriction>
+                        <xs:restriction base="xs:string"></xs:restriction>
                     </xs:simpleType>
                 </xs:element>
                 <xs:element name="iznos">

@@ -15,7 +15,7 @@ import lombok.Setter;
 @Entity @Getter @Setter @NoArgsConstructor
 public class RTGSNalog {
 	@javax.persistence.Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long Id;
+	private String Id;
 	@OneToOne(optional=false)
 	@Cascade(value=CascadeType.ALL)
 	private AnalitikaIzvoda analitikaIzvoda;

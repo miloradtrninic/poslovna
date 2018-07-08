@@ -1,5 +1,6 @@
 package com.poslovna.services;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,29 +25,24 @@ public class PorukaServiceImpl implements PorukaService{
 	private ValutaRepo valutaRepo;
 
 	@Override
-	public boolean createMT900(RtgsCreation rtgsNalog, Banka bankaDuznik) {
+	public boolean createMT900(Date datumValute, Double iznos, String nalogId, Valuta valuta, Banka bankaDuznik) {
 		MT900 mt900 = new MT900();
 		mt900.setBankaDuznik(bankaDuznik);
-		mt900.setDatumValute(rtgsNalog.getDatumValute());
-		mt900.setIznos(rtgsNalog.getIznos());
-		
-		Optional<Valuta> valuta = valutaRepo.findById(rtgsNalog.getSifraValute());
-		//mt900.setPorukaNalogaId(rtgsNalog.getId());
-		mt900.setValuta(valuta.get());
+		mt900.setDatumValute(datumValute);
+		mt900.setPorukaNalogaId(nalogId);
+		mt900.setIznos(iznos);
+		mt900.setValuta(valuta);
 		porukaRepo.save(mt900);
 		return true;
 	}
 
 	@Override
-	public boolean createMT910(RtgsCreation rtgsNalog, Banka bankaPoverioca) {
+	public boolean createMT910(Date datumValute, Double iznos, String nalogId, Valuta valuta, Banka bankaPoverioca) {
 		MT910 mt910 = new MT910();
 		mt910.setBankaPoverioca(bankaPoverioca);
-		mt910.setDatumValute(rtgsNalog.getDatumValute());
-		mt910.setIznos(rtgsNalog.getIznos());
-		
-		Optional<Valuta> valuta = valutaRepo.findById(rtgsNalog.getSifraValute());
-		mt910.setValuta(valuta.get());
-		
+		mt910.setDatumValute(datumValute);
+		mt910.setIznos(iznos);
+		mt910.setValuta(valuta);
 		porukaRepo.save(mt910);
 		return true;
 	}

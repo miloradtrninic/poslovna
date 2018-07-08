@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Optional;import java.util.function.Consumer;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.poslovna.beans.AnalitikaIzvoda;
 import com.poslovna.beans.Banka;
 import com.poslovna.beans.DnevnoStanje;
+import com.poslovna.beans.KliringNalog;
+import com.poslovna.beans.PojedinacnoPlacanje;
+import com.poslovna.beans.Valuta;
 import com.poslovna.dto.ClearingCreation;
 import com.poslovna.dto.PojedinacnoPlacanjeCreation;
 import com.poslovna.exceptions.NelikvidanException;
@@ -22,7 +25,9 @@ import com.poslovna.exceptions.NepoznataValutaExceptio;
 import com.poslovna.exceptions.PojedinacnoPlacanjeException;
 import com.poslovna.repository.BankaRepo;
 import com.poslovna.repository.DnevnoStanjeRepo;
+import com.poslovna.repository.KliringNalogRepo;
 import com.poslovna.repository.ObracunskiRacunBankeRepo;
+import com.poslovna.repository.PojedinacnoPlacanjeRepo;
 import com.poslovna.repository.ValutaRepo;
 
 @Service
@@ -43,6 +48,15 @@ public class ClearingServiceImpl implements ClearingSerivce{
 	@Autowired
 	AnalitikaIzvodaService analitikaService;
 	
+	@Autowired
+	PorukaService porukaService;
+	
+	@Autowired
+	PojedinacnoPlacanjeRepo placanjeRepo;
+	
+	@Autowired
+	KliringNalogRepo kliringRepo;
+	
 	@Override
 	public void processClearing(ClearingCreation clearing) throws NepostojecaBankaException, PojedinacnoPlacanjeException, NelikvidanException, NepoznataValutaExceptio {
 		Calendar danasnjiDan = new GregorianCalendar();
@@ -50,6 +64,10 @@ public class ClearingServiceImpl implements ClearingSerivce{
 		danasnjiDan.set(Calendar.MINUTE, 0);
 		danasnjiDan.set(Calendar.SECOND, 0);
 		
+		Optional<Valuta> valuta = valutaRepo.findById(clearing.getSifraValute());
+		if(!valuta.isPresent()) {
+			throw new NepoznataValutaExceptio("Ne postoji valuta sa sifrom " + clearing.getSifraValute());
+		}
 		Optional<Banka> duznik = bankaRepo.findOneBySwift(clearing.getSwiftDuznik());
 		if(!duznik.isPresent()) {
 			throw new NepostojecaBankaException("Bank ne postoji SWIFT: " + clearing.getSwiftDuznik());
@@ -63,6 +81,12 @@ public class ClearingServiceImpl implements ClearingSerivce{
 		}
 		if(!poverilac.get().getRacun().getBrojRacuna().equals(clearing.getRacunPoverilac())) {
 			throw new NepostojecaBankaException("Obracunski racun "+ clearing.getRacunPoverilac() + " ne postoji");
+		}
+		if(!duznik.get().getRacun().getValuta().getSifra().equals(valuta.get().getSifra())) {
+			throw new NepoznataValutaExceptio("Valuta sa sifrom " + clearing.getSifraValute() + " ne odgovara racunu " + duznik.get().getRacun().getBrojRacuna());
+		}
+		if(!poverilac.get().getRacun().getValuta().getSifra().equals(valuta.get().getSifra())) {
+			throw new NepoznataValutaExceptio("Valuta sa sifrom " + clearing.getSifraValute() + " ne odgovara racunu " + poverilac.get().getRacun().getBrojRacuna());
 		}
 		ArrayList<String> placanjaPrevelika = clearing.getPlacanja().stream()
 													  .filter(p -> p.getIznos() > 250000.0)
@@ -128,6 +152,11 @@ public class ClearingServiceImpl implements ClearingSerivce{
 		}
 		dnevnoStanjeRepo.save(dnevnoStanjeDuznik);
 		dnevnoStanjeRepo.save(dnevnoStanjePoverilac);
+		
+		porukaService.createMT900(clearing.getDatumValute(), clearing.getUkupanIznos(), clearing.getId(), valuta.get(), duznik.get());
+		porukaService.createMT910(clearing.getDatumValute(), clearing.getUkupanIznos(), clearing.getId(), valuta.get(), poverilac.get());
+		
+		KliringNalog kliringNalog = new KliringNalog();
 		for(PojedinacnoPlacanjeCreation placanje:clearing.getPlacanja()) {
 			AnalitikaIzvoda analitika = analitikaService
 					.createAnalitikaIzvoda(placanje.getSifraValute(), 
@@ -138,10 +167,17 @@ public class ClearingServiceImpl implements ClearingSerivce{
 										   placanje.getSvrha(),
 										   clearing.getRacunDuznik(),
 										   clearing.getRacunPoverilac());
+			PojedinacnoPlacanje placanjeEnt = new PojedinacnoPlacanje();
+			placanjeEnt.setAnalitikaIzvoda(analitika);
+			kliringNalog.getPlacanja().add(placanjeEnt);
 		}
-		
-		
-		
+		kliringNalog.setDatum(clearing.getDatum());
+		kliringNalog.setDatumValute(clearing.getDatumValute());
+		kliringNalog.setDuznik(duznik.get());
+		kliringNalog.setPoverilac(poverilac.get());
+		kliringNalog.setUkupanIznos(clearing.getUkupanIznos());
+		kliringNalog.setValuta(valuta.get());
+		kliringRepo.save(kliringNalog);
 	}
 
 }
