@@ -46,7 +46,7 @@ public class DrzavaController {
 		return ResponseEntity.ok(mapper.map(repo.save(drzava), DrzavaView.class));
 	}
 	
-	@PutMapping(value="/edit", produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
+	@PutMapping(value="/update", produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 							   consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> edit(@RequestBody DrzavaCreation entity){
 		Optional<Drzava> optionalEnt = repo.findById(entity.getSifraDrzave());

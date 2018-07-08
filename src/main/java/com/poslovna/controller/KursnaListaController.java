@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -69,5 +70,16 @@ public class KursnaListaController {
 			kursValuta.setPremaValuti(prema.get());
 		}
 		return ResponseEntity.ok(mapper.map(repo.save(kursnaLista), KursnaListaView.class));
+	}
+	
+	@PutMapping(value="/update", produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
+			   consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<?> edit(@RequestBody KursnaLista entity){
+		Optional<KursnaLista> optionalEnt = repo.findById(entity.getId());
+		if(!optionalEnt.isPresent()) {
+			ResponseEntity.notFound().build();
+		}
+		optionalEnt.get().setNazivKursneListe(entity.getNazivKursneListe());
+		return ResponseEntity.ok(mapper.map(repo.save(optionalEnt.get()), KursnaListaView.class));
 	}
 }
