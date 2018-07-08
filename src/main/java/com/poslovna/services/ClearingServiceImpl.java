@@ -92,9 +92,10 @@ public class ClearingServiceImpl implements ClearingSerivce{
 			}
 		} else if(dnevnoStanjeDuznikOpt.get().getNovoStanje() + duznik.get().getRacun().getDozvoljeniMinus() < clearing.getUkupanIznos()) {
 			throw new NelikvidanException("Banka duznik nema dovoljno sredstava.");
+		} else {
+			dnevnoStanjeDuznik = dnevnoStanjeDuznikOpt.get();
 		}
-		dnevnoStanjeDuznik = dnevnoStanjeDuznikOpt.get();
-		if(dnevnoStanjeDuznikOpt.get().getDatumPromene().after(danasnjiDan.getTime())) {
+		if(dnevnoStanjeDuznik.getDatumPromene().after(danasnjiDan.getTime())) {
 			dnevnoStanjeDuznik.setNovoStanje(dnevnoStanjeDuznikOpt.get().getNovoStanje() - clearing.getUkupanIznos());
 			dnevnoStanjeDuznik.setPromeneNaTeret(dnevnoStanjeDuznikOpt.get().getPromeneNaTeret() + clearing.getUkupanIznos());
 		} else {

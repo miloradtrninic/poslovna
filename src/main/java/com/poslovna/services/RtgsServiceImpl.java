@@ -82,9 +82,10 @@ public class RtgsServiceImpl implements RtgsService{
 			}
 		}else if(dnevnoStanjeDuznika.get().getNovoStanje() + bankaDuznik.get().getRacun().getDozvoljeniMinus() < rtgsNalog.getIznos()) {
 			throw new NelikvidanException("Banka duznika nema dovoljno sredstava");
+		}else {
+			dnevnoStanjeDuznikaNovo = dnevnoStanjeDuznika.get();
 		}
-		dnevnoStanjeDuznikaNovo = dnevnoStanjeDuznika.get();
-		if(dnevnoStanjeDuznika.get().getDatumPromene().after(danasnjiDan.getTime())) {
+		if(dnevnoStanjeDuznikaNovo.getDatumPromene().after(danasnjiDan.getTime())) {
 			dnevnoStanjeDuznikaNovo.setNovoStanje(dnevnoStanjeDuznika.get().getNovoStanje() - rtgsNalog.getIznos());
 			dnevnoStanjeDuznikaNovo.setPromeneNaTeret(dnevnoStanjeDuznika.get().getPromeneNaTeret() + rtgsNalog.getIznos());
 		}else {
