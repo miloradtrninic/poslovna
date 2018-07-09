@@ -18,7 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.poslovna.dto.ClearingCreation;
 import com.poslovna.dto.RtgsCreation;
+import com.poslovna.exceptions.NelikvidanException;
+import com.poslovna.exceptions.NepostojecaBankaException;
+import com.poslovna.exceptions.NepostojeciRacunException;
+import com.poslovna.exceptions.NepoznataValutaExceptio;
+import com.poslovna.exceptions.PojedinacnoPlacanjeException;
+import com.poslovna.services.ClearingSerivce;
 import com.poslovna.services.RtgsService;
 
 @RestController
@@ -26,6 +33,9 @@ import com.poslovna.services.RtgsService;
 public class FileUploadController {
 	@Autowired
 	private RtgsService rtgsService;
+	@Autowired
+	private ClearingSerivce clearingService;
+	
 
 	@PostMapping(value = "/rtgs")
 	public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) {
@@ -43,6 +53,25 @@ public class FileUploadController {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@PostMapping(value = "/clearing")
+	public ResponseEntity<?> clearingFileUpload(@RequestParam("file") MultipartFile file) {
+		File f = null;
+			try {
+				f= Files.createTempFile("temp", file.getOriginalFilename()).toFile();
+				file.transferTo(f);
+			    XmlMapper xmlMapper = new XmlMapper();
+			    String rtgsXml = inputStreamToString(new FileInputStream(f));
+			    ClearingCreation clearingCreation = xmlMapper.readValue(rtgsXml, ClearingCreation.class);
+				clearingService.processClearing(clearingCreation);
+				return new ResponseEntity<>(HttpStatus.OK);
+			} catch (NelikvidanException | PojedinacnoPlacanjeException | NepostojeciRacunException
+					| NepostojecaBankaException | NepoznataValutaExceptio e) {
+				return ResponseEntity.badRequest().body(e.getMessage());
+			} catch(Exception e) {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 	}
 	
 	
