@@ -1,6 +1,7 @@
 package com.poslovna.controller;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +39,15 @@ public class ValutaController {
 	
 	@Autowired
 	DrzavaRepo drzavaRepo;
+	
+	@GetMapping(value="/all1", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<List<Valuta>> getAllA(Pageable pageable, @QuerydslPredicate(root=Valuta.class) Predicate predicate){
+		
+		List<Valuta> page = valutaRepo.findAll();
+	
+		return new ResponseEntity<List<Valuta>>(page,HttpStatus.OK);
+	}
+	
 	
 	@GetMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> getAll(Pageable pageable, @QuerydslPredicate(root=Valuta.class) Predicate predicate){

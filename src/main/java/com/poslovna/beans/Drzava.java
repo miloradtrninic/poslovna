@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +23,7 @@ public class Drzava {
 	@OneToMany(orphanRemoval=true, mappedBy="drzava")
 	private Set<NaseljenoMesto> naseljenaMesta;
 	
+	@JsonIgnore
 	@OneToMany(orphanRemoval=true, mappedBy="drzava")
 	private Set<Valuta> valute;
 }
