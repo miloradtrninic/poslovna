@@ -10,4 +10,5 @@ public class NaseljenoMestoView {
 	private String sifraMesta;
 	private String naziv;
 	private String pttOznaka;
+	private String drzavaSifraDrzava;
 }
