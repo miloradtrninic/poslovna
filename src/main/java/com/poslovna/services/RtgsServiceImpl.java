@@ -56,10 +56,11 @@ public class RtgsServiceImpl implements RtgsService{
 		danasnjiDan.set(Calendar.SECOND, 0);
 		
 		
-		Optional<Valuta> valuta = valutaRepo.findById(rtgsNalog.getSifraValute());
-		if(!valuta.isPresent()) {
+		//Optional<Valuta> valuta = valutaRepo.findBySifra(rtgsNalog.getSifraValute());
+		Valuta valuta = valutaRepo.findBySifra(rtgsNalog.getSifraValute());
+		/*if(!valuta.isPresent()) {
 			throw new NepoznataValutaExceptio("Ne postoji valuta sa sifrom " + rtgsNalog.getSifraValute());
-		}
+		}*/
 		Optional<Banka> bankaDuznik = bankaRepo.findOneBySwift(rtgsNalog.getSwiftDuznika());
 		if(!bankaDuznik.isPresent()) {
 			throw new NepostojecaBankaException("Banka ne postoji SWIFT: " + rtgsNalog.getSwiftDuznika());
@@ -74,10 +75,10 @@ public class RtgsServiceImpl implements RtgsService{
 		if(!bankaPoverioca.get().getRacun().getBrojRacuna().equals(rtgsNalog.getObracunskiRacunPoverioca())) {
 			throw new NepostojecaBankaException("Obracunski racun " + rtgsNalog.getObracunskiRacunPoverioca() + " ne postoji.");
 		}
-		if(!bankaDuznik.get().getRacun().getValuta().getSifra().equals(valuta.get().getSifra())) {
+		if(!bankaDuznik.get().getRacun().getValuta().getSifra().equals(valuta.getSifra())) {
 			throw new NepoznataValutaExceptio("Valuta sa sifrom " + rtgsNalog.getSifraValute() + " ne odgovara racunu " + bankaDuznik.get().getRacun().getBrojRacuna());
 		}
-		if(!bankaPoverioca.get().getRacun().getValuta().getSifra().equals(valuta.get().getSifra())) {
+		if(!bankaPoverioca.get().getRacun().getValuta().getSifra().equals(valuta.getSifra())) {
 			throw new NepoznataValutaExceptio("Valuta sa sifrom " + rtgsNalog.getSifraValute() + " ne odgovara racunu " + bankaPoverioca.get().getRacun().getBrojRacuna());
 		}
 		//Skidane novaca sa racuna banke duznika
@@ -131,8 +132,8 @@ public class RtgsServiceImpl implements RtgsService{
 		
 
 		//Kreiranje poruke o zaduzenju (MT900) i poruke o odobrenju (MT910)
-		porukaService.createMT900(rtgsNalog.getDatumValute(), rtgsNalog.getIznos(), rtgsNalog.getId(), valuta.get(), bankaDuznik.get());
-		porukaService.createMT910(rtgsNalog.getDatumValute(), rtgsNalog.getIznos(), rtgsNalog.getId(), valuta.get(), bankaPoverioca.get());
+		porukaService.createMT900(rtgsNalog.getDatumValute(), rtgsNalog.getIznos(), rtgsNalog.getId(), valuta, bankaDuznik.get());
+		porukaService.createMT910(rtgsNalog.getDatumValute(), rtgsNalog.getIznos(), rtgsNalog.getId(), valuta, bankaPoverioca.get());
 
 		AnalitikaIzvoda analitika = analitikaIzvodaService
 				.createAnalitikaIzvoda(rtgsNalog.getSifraValute(), 
