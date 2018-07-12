@@ -46,7 +46,7 @@ public class KursnaListaController {
 	@GetMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> getAll(Pageable pageable, @QuerydslPredicate(root=KursnaLista.class) Predicate predicate){
 		Page<KursnaLista> page = repo.findAll(predicate, pageable);
-		return ResponseEntity.ok(page.map(d -> mapper.map(d, KursnaLista.class)));
+		return ResponseEntity.ok(page.map(d -> mapper.map(d, KursnaListaView.class)));
 	}
 	
 	@PostMapping(value="/new", produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
