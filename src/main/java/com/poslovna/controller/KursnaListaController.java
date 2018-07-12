@@ -49,7 +49,7 @@ public class KursnaListaController {
 		return ResponseEntity.ok(page.map(d -> mapper.map(d, KursnaListaView.class)));
 	}
 	
-	@PostMapping(value="/insert", produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
+	@PostMapping(value="/new", produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 							   consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> creation(@RequestBody KursnaListaCreation entity){
 		KursnaLista kursnaLista = new KursnaLista();

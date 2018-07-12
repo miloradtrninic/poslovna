@@ -9,4 +9,5 @@ public class ValutaView {
 	private String sifra;
 	private String naziv;
 	private Boolean domaca;
+	private String drzavaSifraDrzave;
 }

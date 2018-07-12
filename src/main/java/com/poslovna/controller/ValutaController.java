@@ -64,7 +64,7 @@ public class ValutaController {
 			return ResponseEntity.notFound().build();
 		}
 		valuta.setDrzava(drzava.get());
-		valuta.setDomaca(newEntity.getDomaca());
+		valuta.setDomaca(newEntity.isDomaca());
 		valuta.setNaziv(newEntity.getNaziv());
 		valuta.setSifra(newEntity.getSifra());
 		return ResponseEntity.ok(mapper.map(valutaRepo.save(valuta), ValutaView.class));

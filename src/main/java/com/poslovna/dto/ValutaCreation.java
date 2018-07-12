@@ -8,6 +8,6 @@ import lombok.Setter;
 public class ValutaCreation {
 	private String sifra;
 	private String naziv;
-	private Boolean domaca;
+	private boolean domaca;
 	private String sifraDrzave;
 }
