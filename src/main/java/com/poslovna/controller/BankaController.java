@@ -1,5 +1,7 @@
 package com.poslovna.controller;
 
+import java.util.Set;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,5 +32,10 @@ public class BankaController {
 	public ResponseEntity<?> getAll(Pageable pageable, @QuerydslPredicate(root=Banka.class) Predicate predicate){
 		Page<Banka> page = repo.findAll(predicate, pageable);
 		return ResponseEntity.ok(page.map(d -> mapper.map(d, BankaView.class)));
+	}
+	@GetMapping(value="/allNoAccount", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<?> getAll(){
+		Set<Banka> banke = repo.findAllByRacunIsNull();
+		return ResponseEntity.ok(banke.stream().map(b -> mapper.map(b, BankaView.class)));
 	}
 }

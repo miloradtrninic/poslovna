@@ -1,6 +1,7 @@
 package com.poslovna.repository;
 
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
@@ -16,4 +17,5 @@ public interface BankaRepo extends PagingAndSortingRepository<Banka, String>, Qu
     
     }
 	Optional<Banka> findOneBySwift(String swift);
+	Set<Banka> findAllByRacunIsNull();
 }
