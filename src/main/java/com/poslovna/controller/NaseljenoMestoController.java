@@ -25,8 +25,11 @@ import com.poslovna.repository.DrzavaRepo;
 import com.poslovna.repository.NaseljenoMestoRepo;
 import com.querydsl.core.types.Predicate;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping(value = "/naseljenomesto")
+@Slf4j
 public class NaseljenoMestoController {
 	@Autowired
 	NaseljenoMestoRepo repo;
@@ -40,13 +43,14 @@ public class NaseljenoMestoController {
 	@GetMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> getAll(Pageable pageable, @QuerydslPredicate(root=NaseljenoMesto.class) Predicate predicate){
 		Page<NaseljenoMesto> page = repo.findAll(predicate, pageable);
-		return ResponseEntity.ok(page);
+		return ResponseEntity.ok(page.map(n -> mapper.map(n, NaseljenoMestoView.class)));
 	}
 
 	@PostMapping(value="/new", produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> creation(@RequestBody NaseljenoMestoCreation entity){
 		NaseljenoMesto naseljenoMesto = new NaseljenoMesto();
+	
 		naseljenoMesto.setNaziv(entity.getNaziv());
 		naseljenoMesto.setPttOznaka(entity.getPttOznaka());
 		naseljenoMesto.setSifraMesta(entity.getSifraMesta());
