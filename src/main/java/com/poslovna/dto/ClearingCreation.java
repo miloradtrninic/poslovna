@@ -1,7 +1,10 @@
 package com.poslovna.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +20,6 @@ public class ClearingCreation {
 	private String sifraValute;
 	private Date datumValute;
 	private Date datum;
-	private List<PojedinacnoPlacanjeCreation> placanja;
+	@JacksonXmlElementWrapper(useWrapping = false)
+	private ArrayList<PojedinacnoPlacanjeCreation> placanja;
 }

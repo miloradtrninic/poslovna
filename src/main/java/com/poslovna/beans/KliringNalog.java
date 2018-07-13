@@ -11,14 +11,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity @Getter @Setter @NoArgsConstructor
 public class KliringNalog {
-	@javax.persistence.Id
-	private String Id;
+	@javax.persistence.Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long Id;
 	private Double ukupanIznos;
 	private Date datumValute;
 	private Date datum;
@@ -29,6 +32,7 @@ public class KliringNalog {
 	@ManyToOne(optional=false)
 	private Valuta valuta;
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true)
+	@Cascade(CascadeType.ALL)
 	private Set<PojedinacnoPlacanje> placanja;
 	
 	

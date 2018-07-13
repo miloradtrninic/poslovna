@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +31,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.poslovna.beans.AnalitikaIzvoda;
 import com.poslovna.beans.Banka;
 import com.poslovna.dto.AnalitikaIzvodaView;
+import com.poslovna.dto.BankaCreation;
 import com.poslovna.dto.BankaView;
 import com.poslovna.dto.IzvodView;
 import com.poslovna.repository.AnalitikaIzvodaRepo;
@@ -55,6 +59,22 @@ public class BankaController {
 	public ResponseEntity<?> getAll(){
 		Set<Banka> banke = repo.findAllByRacunIsNull();
 		return ResponseEntity.ok(banke.stream().map(b -> mapper.map(b, BankaView.class)));
+	}
+	
+	@PostMapping(value="/new", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<?> insert(@RequestBody BankaCreation creation) {
+		Optional<Banka> bankaOpt = repo.findById(creation.getPIB());
+		if(bankaOpt.isPresent()) {
+			return ResponseEntity.badRequest().body("Vec postoji banka sa PIBom " + creation.getPIB());
+		}
+		bankaOpt = repo.findOneBySwift(creation.getSwift());
+		if(bankaOpt.isPresent()) {
+			return ResponseEntity.badRequest().body("Vec postoji banka sa SWIFT-om " + creation.getSwift());
+		}
+		Banka banka = new Banka();
+		mapper.map(creation, Banka.class);
+		banka.setRacun(null);
+		return ResponseEntity.ok(mapper.map(repo.save(banka), BankaView.class));
 	}
 
 	

@@ -95,10 +95,9 @@ public class RtgsServiceImpl implements RtgsService{
 				throw new NelikvidanException("Banka duznik je u nedozvoljenom minusu!");
 			}else {
 				dnevnoStanjeDuznikaNovo.setDatumPromene(new Date());
-				dnevnoStanjeDuznikaNovo.setPrethodnoStanje(0.0);
 				dnevnoStanjeDuznikaNovo.setNovoStanje(rtgsNalog.getIznos());
-				dnevnoStanjeDuznikaNovo.setPromeneNaTeret(rtgsNalog.getIznos());
 				dnevnoStanjeDuznikaNovo.setRacunPravnogLica(bankaDuznik.get().getRacun());
+				dnevnoStanjeDuznikaNovo.addTeret(rtgsNalog.getIznos());
 			}
 		}else if(dnevnoStanjeDuznika.get().getNovoStanje() + bankaDuznik.get().getRacun().getDozvoljeniMinus() < rtgsNalog.getIznos()) {
 			throw new NelikvidanException("Banka duznika nema dovoljno sredstava");
@@ -107,14 +106,13 @@ public class RtgsServiceImpl implements RtgsService{
 		}
 		if(dnevnoStanjeDuznikaNovo.getDatumPromene().after(danasnjiDan.getTime())) {
 			dnevnoStanjeDuznikaNovo.setNovoStanje(dnevnoStanjeDuznikaNovo.getNovoStanje() - rtgsNalog.getIznos());
-			dnevnoStanjeDuznikaNovo.setPromeneNaTeret(dnevnoStanjeDuznikaNovo.getPromeneNaTeret() + rtgsNalog.getIznos());
+			dnevnoStanjeDuznikaNovo.addTeret(rtgsNalog.getIznos());
 		}else {
 			dnevnoStanjeDuznikaNovo = new DnevnoStanje();
 			dnevnoStanjeDuznikaNovo.setDatumPromene(new Date());
 			dnevnoStanjeDuznikaNovo.setPrethodnoStanje(dnevnoStanjeDuznika.get().getNovoStanje());
 			dnevnoStanjeDuznikaNovo.setNovoStanje(dnevnoStanjeDuznika.get().getNovoStanje() - rtgsNalog.getIznos());
-			dnevnoStanjeDuznikaNovo.setPromeneNaTeret(rtgsNalog.getIznos());
-			dnevnoStanjeDuznikaNovo.setPromeneUKorist(0.0);
+			dnevnoStanjeDuznikaNovo.addTeret(rtgsNalog.getIznos());
 		}
 		
 		Optional<DnevnoStanje> dnevnoStanjePoverioca = dnevnoStanjeRepo.findFirstByRacunPravnogLicaOrderByDatumPromeneDesc(bankaPoverioca.get().getRacun());
@@ -123,17 +121,22 @@ public class RtgsServiceImpl implements RtgsService{
 			if(dnevnoStanjePoverioca.get().getDatumPromene().after(danasnjiDan.getTime())) {
 				dnevnoStanjePoveriocaNovo = dnevnoStanjePoverioca.get();
 				dnevnoStanjePoverioca.get().setNovoStanje(dnevnoStanjePoveriocaNovo.getNovoStanje()+rtgsNalog.getIznos());
+				dnevnoStanjePoveriocaNovo.addKorist(rtgsNalog.getIznos());
 			}else {
 				dnevnoStanjePoveriocaNovo.setDatumPromene(new Date());
 				dnevnoStanjePoveriocaNovo.setNovoStanje(rtgsNalog.getIznos());
 				dnevnoStanjePoveriocaNovo.setPrethodnoStanje(dnevnoStanjePoverioca.get().getNovoStanje());
 				dnevnoStanjePoveriocaNovo.setRacunPravnogLica(bankaPoverioca.get().getRacun());
+				dnevnoStanjePoveriocaNovo.addKorist(rtgsNalog.getIznos());
 			}
+		} else {
+			dnevnoStanjePoveriocaNovo.setDatumPromene(new Date());
+			dnevnoStanjePoveriocaNovo.setNovoStanje(rtgsNalog.getIznos());
+			dnevnoStanjePoveriocaNovo.setRacunPravnogLica(bankaPoverioca.get().getRacun());
+			dnevnoStanjePoveriocaNovo.addKorist(rtgsNalog.getIznos());
 		}
 		dnevnoStanjeRepo.save(dnevnoStanjeDuznikaNovo);
 		dnevnoStanjeRepo.save(dnevnoStanjePoveriocaNovo);
-
-		
 
 		//Kreiranje poruke o zaduzenju (MT900) i poruke o odobrenju (MT910)
 		porukaService.createMT900(rtgsNalog.getDatumValute(), rtgsNalog.getIznos(), rtgsNalog.getId(), valuta.get(), bankaDuznik.get());

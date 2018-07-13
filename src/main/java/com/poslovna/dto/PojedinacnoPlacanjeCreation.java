@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class PojedinacnoPlacanjeCreation {
-	private String id;
+	private String idPlacanje;
 	private String duznik;
 	private String primalac;
 	private String svrha;

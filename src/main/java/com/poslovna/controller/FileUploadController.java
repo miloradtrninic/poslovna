@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.poslovna.dto.ClearingCreation;
 import com.poslovna.dto.RtgsCreation;
@@ -49,6 +50,9 @@ public class FileUploadController {
 		    RtgsCreation rtgsCreation = xmlMapper.readValue(rtgsXml, RtgsCreation.class);
 		    rtgsService.proccessRtgs(rtgsCreation);
 			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (NelikvidanException | PojedinacnoPlacanjeException | NepostojeciRacunException
+				| NepostojecaBankaException | NepoznataValutaExceptio e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -63,6 +67,7 @@ public class FileUploadController {
 				file.transferTo(f);
 			    XmlMapper xmlMapper = new XmlMapper();
 			    String rtgsXml = inputStreamToString(new FileInputStream(f));
+			    xmlMapper.setSerializationInclusion(Include.NON_EMPTY);
 			    ClearingCreation clearingCreation = xmlMapper.readValue(rtgsXml, ClearingCreation.class);
 				clearingService.processClearing(clearingCreation);
 				return new ResponseEntity<>(HttpStatus.OK);
@@ -70,6 +75,7 @@ public class FileUploadController {
 					| NepostojecaBankaException | NepoznataValutaExceptio e) {
 				return ResponseEntity.badRequest().body(e.getMessage());
 			} catch(Exception e) {
+				e.printStackTrace();
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 	}

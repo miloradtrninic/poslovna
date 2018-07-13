@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +92,7 @@ public class ClearingServiceImpl implements ClearingSerivce{
 		}
 		ArrayList<String> placanjaPrevelika = clearing.getPlacanja().stream()
 													  .filter(p -> p.getIznos() > 250000.0)
-													  .map(p -> p.getId())
+													  .map(p -> p.getIdPlacanje())
 													  .collect(Collectors.toCollection(ArrayList::new));
 		Double sumaPlacanja = clearing.getPlacanja().stream()
 									  .mapToDouble(p -> p.getIznos())
@@ -111,25 +113,28 @@ public class ClearingServiceImpl implements ClearingSerivce{
 				dnevnoStanjeDuznik.setDatumPromene(new Date());
 				dnevnoStanjeDuznik.setPrethodnoStanje(0.0);
 				dnevnoStanjeDuznik.setNovoStanje(-clearing.getUkupanIznos());
-				dnevnoStanjeDuznik.setPromeneNaTeret(clearing.getUkupanIznos());
-				dnevnoStanjeDuznik.setPromeneUKorist(0.0);
+				dnevnoStanjeDuznik.addTeret(clearing.getUkupanIznos());
+				dnevnoStanjeDuznik.setRacunPravnogLica(duznik.get().getRacun());
 			}
 		} else if(dnevnoStanjeDuznikOpt.get().getNovoStanje() + duznik.get().getRacun().getDozvoljeniMinus() < clearing.getUkupanIznos()) {
 			throw new NelikvidanException("Banka duznik nema dovoljno sredstava.");
 		} else {
 			dnevnoStanjeDuznik = dnevnoStanjeDuznikOpt.get();
+			if(dnevnoStanjeDuznik.getDatumPromene().after(danasnjiDan.getTime())) {
+				dnevnoStanjeDuznik.setNovoStanje(dnevnoStanjeDuznik.getNovoStanje() - clearing.getUkupanIznos());
+				dnevnoStanjeDuznik.addTeret(clearing.getUkupanIznos());
+				dnevnoStanjeDuznik.setRacunPravnogLica(duznik.get().getRacun());
+			} else {
+				dnevnoStanjeDuznik = new DnevnoStanje();
+				dnevnoStanjeDuznik.setDatumPromene(new Date());
+				dnevnoStanjeDuznik.setPrethodnoStanje(dnevnoStanjeDuznikOpt.get().getNovoStanje());
+				dnevnoStanjeDuznik.setNovoStanje(dnevnoStanjeDuznikOpt.get().getNovoStanje() - clearing.getUkupanIznos());
+				dnevnoStanjeDuznik.setRacunPravnogLica(duznik.get().getRacun());
+				dnevnoStanjeDuznik.addTeret(clearing.getUkupanIznos());
+			}
 		}
-		if(dnevnoStanjeDuznik.getDatumPromene().after(danasnjiDan.getTime())) {
-			dnevnoStanjeDuznik.setNovoStanje(dnevnoStanjeDuznikOpt.get().getNovoStanje() - clearing.getUkupanIznos());
-			dnevnoStanjeDuznik.setPromeneNaTeret(dnevnoStanjeDuznikOpt.get().getPromeneNaTeret() + clearing.getUkupanIznos());
-		} else {
-			dnevnoStanjeDuznik = new DnevnoStanje();
-			dnevnoStanjeDuznik.setDatumPromene(new Date());
-			dnevnoStanjeDuznik.setPrethodnoStanje(dnevnoStanjeDuznikOpt.get().getNovoStanje());
-			dnevnoStanjeDuznik.setNovoStanje(dnevnoStanjeDuznikOpt.get().getNovoStanje() - clearing.getUkupanIznos());
-			dnevnoStanjeDuznik.setPromeneNaTeret(clearing.getUkupanIznos());
-			dnevnoStanjeDuznik.setPromeneUKorist(0.0);
-		}
+		
+		
 		
 		Optional<DnevnoStanje> dnevnoStanjePoverilacOpt = dnevnoStanjeRepo.findFirstByRacunPravnogLicaOrderByDatumPromeneDesc(poverilac.get().getRacun());
 		DnevnoStanje dnevnoStanjePoverilac = new DnevnoStanje();
@@ -137,16 +142,19 @@ public class ClearingServiceImpl implements ClearingSerivce{
 			if(dnevnoStanjePoverilacOpt.get().getDatumPromene().after(danasnjiDan.getTime())) {
 				dnevnoStanjePoverilac = dnevnoStanjePoverilacOpt.get();
 				dnevnoStanjePoverilacOpt.get().setNovoStanje(dnevnoStanjePoverilacOpt.get().getNovoStanje() + clearing.getUkupanIznos());
+				dnevnoStanjePoverilac.addKorist(clearing.getUkupanIznos());
+				dnevnoStanjePoverilac.setRacunPravnogLica(poverilac.get().getRacun());
 			} else {
 				dnevnoStanjePoverilac.setDatumPromene(new Date());
 				dnevnoStanjePoverilac.setNovoStanje(clearing.getUkupanIznos());
 				dnevnoStanjePoverilac.setPrethodnoStanje(dnevnoStanjePoverilacOpt.get().getNovoStanje());
+				dnevnoStanjePoverilac.addKorist(clearing.getUkupanIznos());
 				dnevnoStanjePoverilac.setRacunPravnogLica(poverilac.get().getRacun());
 			}
 		} else {
 			dnevnoStanjePoverilac.setDatumPromene(new Date());
 			dnevnoStanjePoverilac.setNovoStanje(clearing.getUkupanIznos());
-			dnevnoStanjePoverilac.setPrethodnoStanje(0.0);
+			dnevnoStanjePoverilac.addKorist(clearing.getUkupanIznos());
 			dnevnoStanjePoverilac.setRacunPravnogLica(poverilac.get().getRacun());
 			
 		}
@@ -157,7 +165,8 @@ public class ClearingServiceImpl implements ClearingSerivce{
 		porukaService.createMT910(clearing.getDatumValute(), clearing.getUkupanIznos(), clearing.getId(), valuta.get(), poverilac.get());
 		
 		KliringNalog kliringNalog = new KliringNalog();
-		for(PojedinacnoPlacanjeCreation placanje:clearing.getPlacanja()) {
+		Set<PojedinacnoPlacanje> placanjaPojedinacna = new HashSet<>();
+		for(PojedinacnoPlacanjeCreation placanje : clearing.getPlacanja()) {
 			AnalitikaIzvoda analitika = analitikaService
 					.createAnalitikaIzvoda(placanje.getDatumNaloga(), placanje.getSifraValute(), 
 										   clearing.getDatumValute(),
@@ -169,7 +178,7 @@ public class ClearingServiceImpl implements ClearingSerivce{
 										   clearing.getRacunPoverilac());
 			PojedinacnoPlacanje placanjeEnt = new PojedinacnoPlacanje();
 			placanjeEnt.setAnalitikaIzvoda(analitika);
-			kliringNalog.getPlacanja().add(placanjeEnt);
+			placanjaPojedinacna.add(placanjeEnt);
 		}
 		kliringNalog.setDatum(clearing.getDatum());
 		kliringNalog.setDatumValute(clearing.getDatumValute());
@@ -177,6 +186,8 @@ public class ClearingServiceImpl implements ClearingSerivce{
 		kliringNalog.setPoverilac(poverilac.get());
 		kliringNalog.setUkupanIznos(clearing.getUkupanIznos());
 		kliringNalog.setValuta(valuta.get());
+		kliringRepo.save(kliringNalog);
+		kliringNalog.setPlacanja(placanjaPojedinacna);
 		kliringRepo.save(kliringNalog);
 	}
 

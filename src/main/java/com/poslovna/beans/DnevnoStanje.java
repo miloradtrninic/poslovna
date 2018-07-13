@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,10 +21,31 @@ public class DnevnoStanje {
 	private Long id;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date datumPromene;
+	@ColumnDefault(value="0")
 	private Double prethodnoStanje;
+	@ColumnDefault(value="0")
 	private Double novoStanje;
+	@ColumnDefault(value="0")
 	private Double promeneUKorist;
+	@ColumnDefault(value="0")
 	private Double promeneNaTeret;
 	@ManyToOne
 	private ObracunskiRacunBanke racunPravnogLica;
+	
+	public Double addKorist(Double korist) {
+		if(promeneUKorist == null) {
+			promeneUKorist = korist;
+		} else {
+			promeneUKorist += korist;
+		}
+		return promeneUKorist;
+	}
+	public Double addTeret(Double teret) {
+		if(promeneNaTeret == null) {
+			promeneNaTeret = teret;
+		} else {
+			promeneNaTeret += teret;
+		}
+		return promeneNaTeret;
+	}
 }

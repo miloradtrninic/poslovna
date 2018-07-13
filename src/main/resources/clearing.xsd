@@ -5,12 +5,12 @@
     <xs:element name="Clearing">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="Id">
+                <xs:element name="id">
                     <xs:simpleType>
                         <xs:restriction base="xs:string"></xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="iznos">
+                <xs:element name="ukupanIznos">
                     <xs:simpleType>
                         <xs:restriction base="xs:decimal">
                             <xs:totalDigits value="15"/>
@@ -62,7 +62,7 @@
     </xs:element>
     <xs:complexType name="pojedinacnoPlacanje">
         <xs:sequence>
-            <xs:element name="id">
+            <xs:element name="idPlacanje">
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
                         <xs:length value="50"/>
@@ -131,13 +131,6 @@
                     <xs:restriction base="xs:decimal">
                         <xs:totalDigits value="15"/>
                         <xs:fractionDigits value="2"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="obracunskiRacunDuznika">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:length value="18"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>
