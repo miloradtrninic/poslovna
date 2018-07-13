@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @NoArgsConstructor @Getter @Setter
 public class BankaCreation {
-	private String PIB;
+	private String pib;
 	private String naziv;
 	private String adresa;
 	private String email;

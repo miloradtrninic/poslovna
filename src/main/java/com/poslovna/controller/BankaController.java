@@ -63,17 +63,18 @@ public class BankaController {
 	
 	@PostMapping(value="/new", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> insert(@RequestBody BankaCreation creation) {
-		Optional<Banka> bankaOpt = repo.findById(creation.getPIB());
+		Optional<Banka> bankaOpt = repo.findById(creation.getPib());
 		if(bankaOpt.isPresent()) {
-			return ResponseEntity.badRequest().body("Vec postoji banka sa PIBom " + creation.getPIB());
+			return ResponseEntity.badRequest().body("Vec postoji banka sa PIBom " + creation.getPib());
 		}
 		bankaOpt = repo.findOneBySwift(creation.getSwift());
 		if(bankaOpt.isPresent()) {
 			return ResponseEntity.badRequest().body("Vec postoji banka sa SWIFT-om " + creation.getSwift());
 		}
 		Banka banka = new Banka();
-		mapper.map(creation, Banka.class);
+		banka = mapper.map(creation, Banka.class);
 		banka.setRacun(null);
+		banka.setPIB(creation.getPib());
 		return ResponseEntity.ok(mapper.map(repo.save(banka), BankaView.class));
 	}
 
