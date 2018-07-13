@@ -53,6 +53,7 @@ public class IzvodController {
 		byte[] file = xmlMapper.writeValueAsBytes(izvod);
 		response.reset();
 	    response.setContentType("text/xml");
+	    response.setHeader("Content-Disposition", "attachment");
 		response.getOutputStream().write(file);
 	}
 }

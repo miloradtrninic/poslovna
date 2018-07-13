@@ -14,8 +14,7 @@ public interface AnalitikaIzvodaRepo extends PagingAndSortingRepository<Analitik
 	
 	@Query(value="select * from analitika_izvoda ai join dnevno_stanje ds on ai.dnevno_stanje_duznik_id = ds.id "
 			+"join dnevno_stanje ds2 on ai.dnevno_stanje_poverilac_id = ds2.id "
-			+"where (ds.racun_pravnog_lica_broj_racuna like :accountNumber or ds2.racun_pravnog_lica_broj_racuna like :accountNumber) "
-			+"and ds.datum_promene between :start and :end "
-			+"and ds2.datum_promene between :start and :end", nativeQuery=true)
+			+"where (ds.racun_pravnog_lica_broj_racuna like :accountNumber and ds.datum_promene between :start and :end) "
+			+"or (ds2.racun_pravnog_lica_broj_racuna like :accountNumber and ds2.datum_promene between :start and :end)", nativeQuery=true)
 	List<AnalitikaIzvoda> findAllByDateAndAccount(@Param("start") Date start,@Param("end")  Date end,@Param("accountNumber") String accountNumber);
 }
