@@ -14,5 +14,6 @@ import lombok.Setter;
 public class KursnaListaView {
 	private Long id;
 	private Date primenjujeSeOd;
+	private String naziv;
 	private List<KursValutaView> valute;
 }
