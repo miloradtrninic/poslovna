@@ -21,12 +21,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.poslovna.beans.Banka;
 import com.poslovna.beans.ObracunskiRacunBanke;
 import com.poslovna.beans.Ukidanje;
 import com.poslovna.beans.Valuta;
 import com.poslovna.dto.ObracunskiRacunCreation;
 import com.poslovna.dto.ObracunskiRacunView;
 import com.poslovna.dto.UkidanjeCreation;
+import com.poslovna.repository.BankaRepo;
 import com.poslovna.repository.DnevnoStanjeRepo;
 import com.poslovna.repository.ObracunskiRacunBankeRepo;
 import com.poslovna.repository.UkidanjeRepo;
@@ -59,20 +61,25 @@ public class ObracunskiRacunController {
 	@Autowired
 	private ModelMapper modelMapper;
 	
+	@Autowired 
+	private BankaRepo bankaRep;
+	
 	@PostMapping(value="/new", produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 							   consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> creation(@RequestBody ObracunskiRacunCreation entity){
 		
 		ObracunskiRacunBanke orb = new ObracunskiRacunBanke();
 		Optional<Valuta> v = vatRep.findFirstBySifra(entity.getValuta());
-		
+		Optional<Banka> b = bankaRep.findById(entity.getBanka());
 		orb.setBrojRacuna(entity.getBrojRacuna());
 		orb.setDatumOtvaranja(new Date());
 		orb.setVazeci(true);
 		orb.setValuta(v.get());
 		orb.setDozvoljeniMinus(Double.parseDouble(entity.getDozvoljeniMinus()));
 		
-		
+		orbRep.save(orb);
+		b.get().setRacun(orb);
+		bankaRep.save(b.get());
 		
 		return ResponseEntity.ok(modelMapper.map(orbRep.save(orb), ObracunskiRacunView.class));
 	}
@@ -136,9 +143,10 @@ public class ObracunskiRacunController {
                                    "user=root&password=root");
 				HashMap map = new HashMap();
 				map.put("STATUS", status);
-	            JasperReport jasReport = (JasperReport) JRLoader.loadObjectFromFile("C:\\Users\\Danijela\\JaspersoftWorkspace\\MyReports\\Izvjestaj1.jasper");
-	            JasperPrint jasPrint = JasperFillManager.fillReport(jasReport, map, conn);
-	            File pdf = File.createTempFile("output3", ".pdf");
+	          //  JasperReport jasReport = (JasperReport) JRLoader.loadObjectFromFile("C:\\Users\\Danijela\\JaspersoftWorkspace\\MyReports\\Izvjestaj1.jasper");
+	          //  JasperPrint jasPrint = JasperFillManager.fillReport(jasReport, map, conn);
+				JasperPrint jasPrint = JasperFillManager.fillReport(getClass().getResource("/Izvjestaj1.jasper").openStream(),map,conn);
+				File pdf = File.createTempFile("output3", ".pdf");
 				JasperExportManager.exportReportToPdfStream(jasPrint, new FileOutputStream(pdf));
 				System.out.println("Temp file : " + pdf.getAbsolutePath());
 				
@@ -159,9 +167,10 @@ public class ObracunskiRacunController {
                                "user=root&password=root");
 			HashMap map = new HashMap();
 			map.put("STATUS", status);
-            JasperReport jasReport = (JasperReport) JRLoader.loadObjectFromFile("C:\\Users\\Danijela\\JaspersoftWorkspace\\MyReports\\Izvjestaj2.jasper");
-            JasperPrint jasPrint = JasperFillManager.fillReport(jasReport, map, conn);
-            File pdf = File.createTempFile("output3", ".pdf");
+          //  JasperReport jasReport = (JasperReport) JRLoader.loadObjectFromFile("C:\\Users\\Danijela\\JaspersoftWorkspace\\MyReports\\Izvjestaj2.jasper");
+          //  JasperPrint jasPrint = JasperFillManager.fillReport(jasReport, map, conn);
+			JasperPrint jasPrint = JasperFillManager.fillReport(getClass().getResource("/Izvjestaj2.jasper").openStream(),map,conn);
+			File pdf = File.createTempFile("output3", ".pdf");
 			JasperExportManager.exportReportToPdfStream(jasPrint, new FileOutputStream(pdf));
 			System.out.println("Temp file : " + pdf.getAbsolutePath());
 			
