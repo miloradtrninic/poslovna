@@ -18,4 +18,6 @@ public interface BankaRepo extends PagingAndSortingRepository<Banka, String>, Qu
     }
 	Optional<Banka> findOneBySwift(String swift);
 	Set<Banka> findAllByRacunIsNull();
+	
+	
 }

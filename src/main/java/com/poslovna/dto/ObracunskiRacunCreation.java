@@ -10,5 +10,6 @@ public class ObracunskiRacunCreation {
 	private String brojRacuna;
 	private String dozvoljeniMinus;
 	private String valuta;
+	private String banka;
 
 }
