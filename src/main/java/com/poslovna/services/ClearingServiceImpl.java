@@ -159,7 +159,7 @@ public class ClearingServiceImpl implements ClearingSerivce{
 		KliringNalog kliringNalog = new KliringNalog();
 		for(PojedinacnoPlacanjeCreation placanje:clearing.getPlacanja()) {
 			AnalitikaIzvoda analitika = analitikaService
-					.createAnalitikaIzvoda(placanje.getSifraValute(), 
+					.createAnalitikaIzvoda(placanje.getDatumNaloga(), placanje.getSifraValute(), 
 										   clearing.getDatumValute(),
 										   placanje.getIznos(),
 										   dnevnoStanjeDuznik,

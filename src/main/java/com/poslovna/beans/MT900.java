@@ -11,6 +11,6 @@ import lombok.Setter;
 @Entity @Getter @Setter @NoArgsConstructor
 @DiscriminatorValue("MT900")
 public class MT900 extends Poruka {
-	@ManyToOne(optional=false)
+	@ManyToOne()
 	private Banka bankaDuznik;
 }

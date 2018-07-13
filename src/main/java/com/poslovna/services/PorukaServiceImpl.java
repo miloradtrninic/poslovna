@@ -12,6 +12,8 @@ import com.poslovna.beans.MT900;
 import com.poslovna.beans.MT910;
 import com.poslovna.beans.Valuta;
 import com.poslovna.dto.RtgsCreation;
+import com.poslovna.repository.MT900Repo;
+import com.poslovna.repository.MT910Repo;
 import com.poslovna.repository.PorukaRepo;
 import com.poslovna.repository.ValutaRepo;
 
@@ -19,10 +21,10 @@ import com.poslovna.repository.ValutaRepo;
 @Transactional
 public class PorukaServiceImpl implements PorukaService{
 	@Autowired
-	private PorukaRepo porukaRepo;
+	private MT900Repo mt900Repo;
 	
 	@Autowired
-	private ValutaRepo valutaRepo;
+	private MT910Repo mt910Repo;
 
 	@Override
 	public boolean createMT900(Date datumValute, Double iznos, String nalogId, Valuta valuta, Banka bankaDuznik) {
@@ -32,7 +34,7 @@ public class PorukaServiceImpl implements PorukaService{
 		mt900.setPorukaNalogaId(nalogId);
 		mt900.setIznos(iznos);
 		mt900.setValuta(valuta);
-		porukaRepo.save(mt900);
+		mt900Repo.save(mt900);
 		return true;
 	}
 
@@ -43,7 +45,7 @@ public class PorukaServiceImpl implements PorukaService{
 		mt910.setDatumValute(datumValute);
 		mt910.setIznos(iznos);
 		mt910.setValuta(valuta);
-		porukaRepo.save(mt910);
+		mt910Repo.save(mt910);
 		return true;
 	}
 

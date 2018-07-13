@@ -24,11 +24,12 @@ public class AnalitikaIzvodaServiceImpl implements AnalitikaIzvodaService{
 	private ValutaRepo valutaRepo;
 
 	@Override
-	public AnalitikaIzvoda createAnalitikaIzvoda(String sifraValute, Date datumValute,
+	public AnalitikaIzvoda createAnalitikaIzvoda(Date datumNalog, String sifraValute, Date datumValute,
 			  double iznos, DnevnoStanje dnevnoStanjeDuznik, 
 			  DnevnoStanje dnevnoStanjePoverilac, String svrha,
 			  String racunDuznika, String racunPoverioca) throws NepoznataValutaExceptio {
 		AnalitikaIzvoda analitika = new AnalitikaIzvoda();
+		analitika.setDatumNaloga(datumNalog);
 		analitika.setDatumValute(datumValute);
 		analitika.setDnevnoStanjeDuznik(dnevnoStanjeDuznik);
 		analitika.setDnevnoStanjePoverilac(dnevnoStanjePoverilac);

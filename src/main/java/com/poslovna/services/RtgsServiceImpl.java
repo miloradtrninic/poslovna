@@ -13,6 +13,7 @@ import com.poslovna.beans.AnalitikaIzvoda;
 import com.poslovna.beans.Banka;
 import com.poslovna.beans.DnevnoStanje;
 import com.poslovna.beans.ObracunskiRacunBanke;
+import com.poslovna.beans.RTGSNalog;
 import com.poslovna.beans.Valuta;
 import com.poslovna.dto.RtgsCreation;
 import com.poslovna.exceptions.NelikvidanException;
@@ -22,6 +23,7 @@ import com.poslovna.exceptions.PojedinacnoPlacanjeException;
 import com.poslovna.repository.BankaRepo;
 import com.poslovna.repository.DnevnoStanjeRepo;
 import com.poslovna.repository.ObracunskiRacunBankeRepo;
+import com.poslovna.repository.RTGSNalogRepo;
 import com.poslovna.repository.ValutaRepo;
 
 @Service
@@ -47,6 +49,9 @@ public class RtgsServiceImpl implements RtgsService{
 	
 	@Autowired
 	ValutaRepo valutaRepo;
+	
+	@Autowired
+	RTGSNalogRepo rtgsNalogRepo;
 
 	@Override
 	public void proccessRtgs(RtgsCreation rtgsNalog) throws NepostojecaBankaException, PojedinacnoPlacanjeException, NelikvidanException, NepoznataValutaExceptio {
@@ -101,8 +106,8 @@ public class RtgsServiceImpl implements RtgsService{
 			dnevnoStanjeDuznikaNovo = dnevnoStanjeDuznika.get();
 		}
 		if(dnevnoStanjeDuznikaNovo.getDatumPromene().after(danasnjiDan.getTime())) {
-			dnevnoStanjeDuznikaNovo.setNovoStanje(dnevnoStanjeDuznika.get().getNovoStanje() - rtgsNalog.getIznos());
-			dnevnoStanjeDuznikaNovo.setPromeneNaTeret(dnevnoStanjeDuznika.get().getPromeneNaTeret() + rtgsNalog.getIznos());
+			dnevnoStanjeDuznikaNovo.setNovoStanje(dnevnoStanjeDuznikaNovo.getNovoStanje() - rtgsNalog.getIznos());
+			dnevnoStanjeDuznikaNovo.setPromeneNaTeret(dnevnoStanjeDuznikaNovo.getPromeneNaTeret() + rtgsNalog.getIznos());
 		}else {
 			dnevnoStanjeDuznikaNovo = new DnevnoStanje();
 			dnevnoStanjeDuznikaNovo.setDatumPromene(new Date());
@@ -117,7 +122,7 @@ public class RtgsServiceImpl implements RtgsService{
 		if(dnevnoStanjePoverioca.isPresent()) {
 			if(dnevnoStanjePoverioca.get().getDatumPromene().after(danasnjiDan.getTime())) {
 				dnevnoStanjePoveriocaNovo = dnevnoStanjePoverioca.get();
-				dnevnoStanjePoverioca.get().setNovoStanje(dnevnoStanjePoverioca.get().getNovoStanje()+rtgsNalog.getIznos());
+				dnevnoStanjePoverioca.get().setNovoStanje(dnevnoStanjePoveriocaNovo.getNovoStanje()+rtgsNalog.getIznos());
 			}else {
 				dnevnoStanjePoveriocaNovo.setDatumPromene(new Date());
 				dnevnoStanjePoveriocaNovo.setNovoStanje(rtgsNalog.getIznos());
@@ -135,7 +140,7 @@ public class RtgsServiceImpl implements RtgsService{
 		porukaService.createMT910(rtgsNalog.getDatumValute(), rtgsNalog.getIznos(), rtgsNalog.getId(), valuta.get(), bankaPoverioca.get());
 
 		AnalitikaIzvoda analitika = analitikaIzvodaService
-				.createAnalitikaIzvoda(rtgsNalog.getSifraValute(), 
+				.createAnalitikaIzvoda(rtgsNalog.getDatumNaloga(), rtgsNalog.getSifraValute(), 
 									   rtgsNalog.getDatumValute(),
 									   rtgsNalog.getIznos(),
 									   dnevnoStanjeDuznikaNovo,
@@ -143,6 +148,9 @@ public class RtgsServiceImpl implements RtgsService{
 									   rtgsNalog.getSvrhaPlacanja(),
 									   rtgsNalog.getRacunDuznika(),
 									   rtgsNalog.getRacunPoverioca());
+		RTGSNalog nalog = new RTGSNalog();
+		nalog.setAnalitikaIzvoda(analitika);
+		rtgsNalogRepo.save(nalog);
 	}
 
 }
