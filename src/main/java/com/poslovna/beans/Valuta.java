@@ -7,7 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class Valuta {
 	@Column(columnDefinition="VARCHAR(20)")
 	private String naziv;
 	private Boolean domaca;
+	@JsonIgnore
 	@ManyToOne(optional=false)
 	private Drzava drzava;
 	

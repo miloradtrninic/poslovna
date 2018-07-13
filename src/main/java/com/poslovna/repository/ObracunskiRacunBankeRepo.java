@@ -10,5 +10,8 @@ public interface ObracunskiRacunBankeRepo extends PagingAndSortingRepository<Obr
 	ObracunskiRacunBanke findOneByBrojRacuna(String brojRacuna);
 	
 	List<ObracunskiRacunBanke> findAll();
+	
+	ObracunskiRacunBanke findByBrojRacuna(String brojRacuna);
+	List<ObracunskiRacunBanke> findByVazeci(boolean vazeci);
 
 }

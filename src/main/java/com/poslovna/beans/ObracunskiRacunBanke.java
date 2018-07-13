@@ -1,7 +1,7 @@
 package com.poslovna.beans;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,5 +29,6 @@ public class ObracunskiRacunBanke {
 	@ManyToOne(optional=false)
 	private Valuta valuta;
 	@OneToMany(mappedBy="racunPravnogLica")
-	private Set<DnevnoStanje> dnevnaStanja;
+	@JsonIgnore
+	private List<DnevnoStanje> dnevnaStanja;
 }
