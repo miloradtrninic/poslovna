@@ -64,7 +64,7 @@ public class ClearingServiceImpl implements ClearingSerivce{
 		danasnjiDan.set(Calendar.MINUTE, 0);
 		danasnjiDan.set(Calendar.SECOND, 0);
 		
-		Optional<Valuta> valuta = valutaRepo.findById(clearing.getSifraValute());
+		Optional<Valuta> valuta = valutaRepo.findFirstBySifra(clearing.getSifraValute());
 		if(!valuta.isPresent()) {
 			throw new NepoznataValutaExceptio("Ne postoji valuta sa sifrom " + clearing.getSifraValute());
 		}

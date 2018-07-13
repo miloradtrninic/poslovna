@@ -1,6 +1,7 @@
 package com.poslovna.beans;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -29,8 +30,15 @@ public class KursnaLista {
 	@Column(columnDefinition="VARCHAR(80)")
 	private String nazivKursneListe;
 	@OneToMany(orphanRemoval=true, mappedBy="kursnaLista", fetch=FetchType.EAGER)
-	@Cascade(value=CascadeType.ALL)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	private Set<KursValuta> valute;
 	@ManyToOne
 	private Banka banka;
+	
+	public Set<KursValuta> getValute() {
+		if(valute == null)
+			return new HashSet<>();
+		else 
+			return valute;
+	}
 }

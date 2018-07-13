@@ -73,7 +73,7 @@ public class ValutaController {
 	
 	@PutMapping(value="/update", produces=MediaType.APPLICATION_JSON_UTF8_VALUE, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> edit(@RequestBody Valuta valuta){
-		Optional<Valuta> valutaOpt = valutaRepo.findById(valuta.getSifra());
+		Optional<Valuta> valutaOpt = valutaRepo.findFirstBySifra(valuta.getSifra());
 		if(!valutaOpt.isPresent()) {
 			ResponseEntity.notFound().build();
 		}

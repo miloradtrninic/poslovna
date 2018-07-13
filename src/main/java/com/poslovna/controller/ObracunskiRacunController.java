@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,12 +64,12 @@ public class ObracunskiRacunController {
 	public ResponseEntity<?> creation(@RequestBody ObracunskiRacunCreation entity){
 		
 		ObracunskiRacunBanke orb = new ObracunskiRacunBanke();
-		Valuta v = vatRep.findBySifra(entity.getValuta());
+		Optional<Valuta> v = vatRep.findFirstBySifra(entity.getValuta());
 		
 		orb.setBrojRacuna(entity.getBrojRacuna());
 		orb.setDatumOtvaranja(new Date());
 		orb.setVazeci(true);
-		orb.setValuta(v);
+		orb.setValuta(v.get());
 		orb.setDozvoljeniMinus(Double.parseDouble(entity.getDozvoljeniMinus()));
 		
 		

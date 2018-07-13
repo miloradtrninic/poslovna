@@ -1,5 +1,6 @@
 package com.poslovna.controller;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -28,8 +29,11 @@ import com.poslovna.repository.KursnaListaRepo;
 import com.poslovna.repository.ValutaRepo;
 import com.querydsl.core.types.Predicate;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping(value = "/kursnalista")
+@Slf4j
 public class KursnaListaController {
 	@Autowired
 	KursnaListaRepo repo;
@@ -58,17 +62,23 @@ public class KursnaListaController {
 			ResponseEntity.notFound().build();
 		}
 		kursnaLista.setBanka(banka.get());
+		kursnaLista.setNazivKursneListe(entity.getNaziv());
 		kursnaLista.setPrimenjujeSeOd(entity.getPrimenjujeSeOd());
+		HashSet<KursValuta> valute = new HashSet<>();
 		for(KursValutaCreation kursValutaCreation : entity.getValute()) {
 			KursValuta kursValuta = new KursValuta();
 			kursValuta.setKupovni(kursValutaCreation.getKupovni());
 			kursValuta.setProdajni(kursValutaCreation.getProdajni());
 			kursValuta.setSrednji(kursValutaCreation.getSrednji());
-			Optional<Valuta> osnovna = valutaRepo.findById(kursValutaCreation.getOsnovnaValuta());
-			Optional<Valuta> prema = valutaRepo.findById(kursValutaCreation.getPremaValuti());
+			Optional<Valuta> osnovna = valutaRepo.findFirstBySifra(kursValutaCreation.getOsnovnaValuta());
+			Optional<Valuta> prema = valutaRepo.findFirstBySifra(kursValutaCreation.getPremaValuti());
 			kursValuta.setOsnovnaValuta(osnovna.get());
 			kursValuta.setPremaValuti(prema.get());
+			valute.add(kursValuta);
+			kursValuta.setKursnaLista(kursnaLista);
 		}
+		repo.save(kursnaLista);
+		kursnaLista.setValute(valute);
 		return ResponseEntity.ok(mapper.map(repo.save(kursnaLista), KursnaListaView.class));
 	}
 	

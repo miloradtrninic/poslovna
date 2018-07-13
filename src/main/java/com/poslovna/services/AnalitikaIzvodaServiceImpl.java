@@ -36,7 +36,7 @@ public class AnalitikaIzvodaServiceImpl implements AnalitikaIzvodaService{
 		analitika.setSvrhaPlacanja(svrha);
 		analitika.setRacunDuznika(racunDuznika);
 		analitika.setRacunPoverioca(racunPoverioca);
-		Optional<Valuta> valuta = valutaRepo.findById(sifraValute);
+		Optional<Valuta> valuta = valutaRepo.findFirstBySifra(sifraValute);
 		if(!valuta.isPresent())
 			throw new NepoznataValutaExceptio("Valuta sa sifrom " + sifraValute + " ne postoji");
 		analitika.setValuta(valuta.get());

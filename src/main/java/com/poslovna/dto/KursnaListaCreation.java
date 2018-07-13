@@ -11,5 +11,6 @@ import lombok.Setter;
 public class KursnaListaCreation {
 	private Date primenjujeSeOd;
 	private String PIB;
+	private String naziv;
 	private List<KursValutaCreation> valute;
 }
